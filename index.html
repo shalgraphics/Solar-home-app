@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solar Home App</title>
+
+  <style>
+    :root {
+      --yellow: #F3C332;
+      --yellow-2: #F0C12A;
+      --blue: #241F8F;
+      --blue-2: #3227BC;
+      --white: #ffffff;
+      --soft-gray: #D8D8D8;
+      --text: #4B4B4B;
+      --chip: #AF958A;
+      --card-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      --radius: 22px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #111;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .phone {
+      width: 360px;
+      height: 760px;
+      background: var(--yellow);
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .app-page {
+      position: absolute;
+      inset: 0;
+      background: var(--yellow);
+      display: none;
+      flex-direction: column;
+    }
+
+    .app-page.active {
+      display: flex;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 14px 92px;
+      scrollbar-width: none;
+    }
+
+    .content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-title {
+      color: var(--blue);
+      font-size: 26px;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 22px;
+      letter-spacing: 0.3px;
+    }
+
+    .small-title {
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .small-sub {
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      color: var(--white);
+      border-radius: 18px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 74px;
+      background: var(--blue);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 15;
+    }
+
+    .nav-item {
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 25%;
+    }
+
+    .nav-item .icon {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: var(--yellow);
+    }
+
+    /* INTRO */
+    #introPage {
+      display: flex;
+      color: white;
+      text-align: center;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 24px 24px;
+      background-image:
+        linear-gradient(to bottom, rgba(20, 20, 20, 0.12), rgba(0, 0, 0, 0.43)),
+        url("ChatGPT Image Apr 7, 2026, 01_01_14 PM.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 20;
+    }
+
+    .intro-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .intro-top {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .intro-middle {
+      margin-top: 340px;
+    }
+
+    .intro-powered {
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .intro-smart {
+      font-size: 8px;
+      letter-spacing: 0.8px;
+    }
+
+    .intro-home {
+      margin-top: 26px;
+      font-size: 30px;
+      font-weight: 900;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .intro-btn {
+      margin-top: 26px;
+      background: var(--yellow);
+      color: #111;
+      border: none;
+      border-radius: 999px;
+      min-width: 145px;
+      padding: 12px 18px;
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .intro-footer {
+      margin-top: auto;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    /* HOME */
+    .search-box {
+      height: 42px;
+      background: var(--blue);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      margin-bottom: 10px;
+    }
+
+    .search-icon {
+      color: var(--yellow);
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .search-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      color: white;
+      font-size: 14px;
+    }
+
+    .search-input::placeholder {
+      color: #DCD8FF;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: none;
+      background: var(--chip);
+      color: white;
+      border-radius: 18px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--blue);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .appliance-card {
+      min-height: 176px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-icon {
+      font-size: 38px;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .card-name {
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 3px;
+    }
+
+    .card-power {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--yellow);
+    }
+
+    .card-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .tag {
+      flex: 1;
+      background: rgba(178, 165, 255, 0.55);
+      border-radius: 20px;
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .go-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(178, 165, 255, 0.75);
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .price {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* OVERLAY */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.18);
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .side-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--yellow);
+      transform: translateX(100%);
+      transition: transform 0.35s ease;
+      padding: 38px 22px 22px;
+      text-align: center;
+    }
+
+    .overlay.show .side-panel {
+      transform: translateX(0);
+    }
+
+    .back-circle {
+      position: absolute;
+      top: 30px;
+      right: 22px;
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      background: var(--blue);
+      color: var(--yellow);
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .overlay-head {
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 900;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .overlay-sub {
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0 auto 26px;
+      max-width: 280px;
+    }
+
+    .selected-name {
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .selected-power {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .hour-box {
+      width: 100%;
+      height: 76px;
+      border-radius: 22px;
+      background: #D3D3D3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .hour-display {
+      color: var(--blue);
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .hour-controls {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hour-btn {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: var(--blue);
+      color: var(--yellow);
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      width: 100%;
+      height: 46px;
+      border: none;
+      border-radius: 24px;
+      background: var(--blue);
+      color: var(--yellow);
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .note-text {
+      margin-top: 14px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* MY LIST */
+    .list-card {
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .list-empty {
+      padding: 18px 14px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .list-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .list-row:last-child {
+      border-bottom: none;
+    }
+
+    .list-left {
+      min-width: 0;
+    }
+
+    .list-name {
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .list-meta {
+      font-size: 11px;
+      opacity: 0.95;
+      line-height: 1.35;
+    }
+
+    .list-energy {
+      font-size: 12px;
+      font-weight: 800;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .outline-btn {
+      width: 100%;
+      height: 44px;
+      border-radius: 24px;
+      border: 2px solid var(--blue);
+      background: transparent;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    /* RESULTS */
+    .results-big {
+      padding: 14px 12px;
+      margin-bottom: 12px;
+    }
+
+    .results-label {
+      font-size: 12px;
+      font-weight: 900;
+      opacity: 0.98;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .results-value {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .results-sub {
+      font-size: 11px;
+      margin-top: 10px;
+      font-weight: 700;
+      opacity: 0.98;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card {
+      padding: 12px 10px;
+      min-height: 118px;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-top: 2px;
+      margin-bottom: 8px;
+    }
+
+    .pill {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 900;
+      padding: 5px 8px;
+      border-radius: 14px;
+      margin-top: 8px;
+    }
+
+    .table-card {
+      padding: 10px 0 0;
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px 8px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .edit-link {
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .table-name {
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .table-energy {
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-weight: 900;
+      color: var(--yellow);
+    }
+
+    .bottom-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .mini-btn {
+      flex: 1;
+      height: 34px;
+      border-radius: 18px;
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .mini-btn.fill {
+      border: none;
+      background: var(--yellow);
+      color: var(--blue);
+    }
+
+    .mini-btn.outline {
+      background: transparent;
+      color: var(--yellow);
+      border: 1.8px solid var(--yellow);
+    }
+
+    /* RECOMMENDATIONS */
+    .rec-main {
+      padding: 14px 12px;
+      margin-bottom: 12px;
+    }
+
+    .big-message {
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.22;
+      color: var(--yellow);
+      margin-bottom: 10px;
+    }
+
+    .rec-note {
+      font-size: 11px;
+      line-height: 1.4;
+      opacity: 0.98;
+    }
+
+    .recommend-card {
+      display: grid;
+      grid-template-columns: 1fr 74px;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .recommend-name {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .recommend-value {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+
+    .recommend-sub {
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .tip-box {
+      background: var(--yellow);
+      color: var(--blue);
+      border-radius: 12px;
+      padding: 8px 7px;
+      align-self: stretch;
+    }
+
+    .tip-title {
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .tip-text {
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .why-card {
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .formula-card {
+      padding: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .formula-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--yellow);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .formula-item {
+      margin-bottom: 10px;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .formula-item strong {
+      color: var(--yellow);
+      display: block;
+      margin-bottom: 3px;
+      font-size: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+
+    <!-- INTRO -->
+    <section class="app-page active" id="introPage" style="z-index:20;">
+      <div class="intro-wrap">
+        <div class="intro-top">SOLAR</div>
+
+        <div class="intro-middle">
+          <div class="intro-powered">Powered Always</div>
+          <div class="intro-smart">SMART SOLAR SIZING APP</div>
+        </div>
+
+        <div class="intro-home">Home</div>
+
+        <button class="intro-btn" id="getStartedBtn">
+          <span>GET STARTED</span>
+          <span>›</span>
+        </button>
+
+        <div class="intro-footer">Designed by SHALGRAPHICS</div>
+      </div>
+    </section>
+
+    <!-- HOME -->
+    <section class="app-page" id="homePage">
+      <div class="content">
+        <div class="section-title">SOLAR HOME</div>
+
+        <div class="small-title">Choose Your Appliances</div>
+        <div class="small-sub">Tap any appliances to see details and energy impact</div>
+
+        <div class="search-box">
+          <div class="search-icon">⌕</div>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search appliance..." />
+        </div>
+
+        <div class="chips">
+          <button class="chip active" data-category="all">All</button>
+          <button class="chip" data-category="Lighting">Lighting</button>
+          <button class="chip" data-category="Entertainment">Entertainment</button>
+          <button class="chip" data-category="Refrigeration">Refrigeration</button>
+          <button class="chip" data-category="House Hold">House Hold</button>
+          <button class="chip" data-category="Kitchen">Kitchen</button>
+          <button class="chip" data-category="Cooling">Cooling</button>
+          <button class="chip" data-category="Office">Office</button>
+        </div>
+
+        <div class="grid" id="applianceGrid"></div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR / RESULTS -->
+    <section class="app-page" id="resultsPage">
+      <div class="content">
+        <div class="small-title">Energy Results</div>
+        <div class="small-sub">Based on <span id="applianceCountText">0</span> Appliances. Uganda (240V, 50Hz)</div>
+
+        <div class="card results-big">
+          <div class="results-label">Total Daily Energy</div>
+          <div class="results-value" id="totalEnergyWhText">0 Wh/day</div>
+          <div class="results-sub" id="totalEnergyKwhText">0.00 kWh per day</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <div class="results-label">Panel Power Needed</div>
+            <div class="stat-value" id="panelPowerText">0 Wp</div>
+            <div class="results-sub" id="sunHoursText">Peak sun hours: 5.5</div>
+            <div class="pill">Includes 15% system losses</div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="results-label">Battery Capacity</div>
+            <div class="stat-value" id="batteryText">0 kWh</div>
+            <div class="results-sub">For one day autonomy</div>
+            <div class="pill">24V System</div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="results-label">Inverter Size</div>
+            <div class="stat-value" id="inverterText">0 kVA</div>
+            <div class="results-sub">With 20% safety margin</div>
+            <div class="pill">Includes 15% system losses</div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="results-label">Estimated Load</div>
+            <div class="stat-value" id="currentText">0 Amps</div>
+            <div class="results-sub">For one day autonomy</div>
+            <div class="pill">24V System</div>
+          </div>
+        </div>
+
+        <div class="card table-card">
+          <div class="table-head">
+            <div>Your Selected Appliance</div>
+            <div class="edit-link" id="editListBtn">Edit List</div>
+          </div>
+
+          <div id="selectedTable"></div>
+
+          <div class="total-row">
+            <div>TOTAL</div>
+            <div id="totalTableWhText">0 Wh/day</div>
+          </div>
+        </div>
+
+        <div class="bottom-actions">
+          <button class="mini-btn outline" id="calculateAgainBtn">Calculate Again</button>
+          <button class="mini-btn fill" id="viewRecommendationsBtn">View Recommendations</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MY LIST -->
+    <section class="app-page" id="myListPage">
+      <div class="content">
+        <div class="section-title">MY LIST</div>
+        <div class="small-title">Selected Appliances</div>
+        <div class="small-sub">These are the appliances you added with daily hours of use.</div>
+
+        <div class="card list-card" id="myListCard"></div>
+
+        <div class="action-btns">
+          <button class="outline-btn" id="clearListBtn">Clear List</button>
+          <button class="primary-btn" id="showResultsBtn">View Results</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECOMMEND -->
+    <section class="app-page" id="recommendPage">
+      <div class="content">
+        <div class="small-title">System Recommendations</div>
+        <div class="small-sub">Personalized For Your Energy Needs</div>
+
+        <div class="card rec-main">
+          <div class="results-label">Smart Recommendation</div>
+          <div class="big-message" id="smartRecommendationText">A Small Solar System Will Perfectly Power Your House!
+          </div>
+          <div class="rec-note">Your load is ideal for a reliable and efficient solar setup.</div>
+        </div>
+
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Solar Panels</div>
+            <div class="recommend-value" id="recommendPanelText">0 Wp</div>
+            <div class="recommend-sub" id="recommendPanelSub">Example: 1 × 0W panel</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Place panels where they get enough sunlight</div>
+          </div>
+        </div>
+
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Battery Bank</div>
+            <div class="recommend-value" id="recommendBatteryText">0 kWh</div>
+            <div class="recommend-sub" id="recommendBatterySub">Example recommendation</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Choose lithium for longer life and better performance</div>
+          </div>
+        </div>
+
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Inverter</div>
+            <div class="recommend-value" id="recommendInverterText">0 kVA</div>
+            <div class="recommend-sub">Pure Sine Wave Inverter</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Inverter should be 20-30% higher than your total load</div>
+          </div>
+        </div>
+
+        <div class="card why-card">
+          <div class="recommend-name">Why These Sizes?</div>
+          <div class="recommend-sub">We added safety margins and system losses to give you a reliable and long-lasting
+            system.</div>
+        </div>
+
+        <button class="primary-btn" style="margin-bottom:10px;">Save Recommendation</button>
+        <button class="outline-btn" style="height:46px;">Share Results</button>
+
+        <div class="card formula-card">
+          <div class="formula-title">Formulas Used</div>
+
+          <div class="formula-item">
+            <strong>1. Appliance Energy</strong>
+            Energy per appliance = Power (W) × Hours of use per day
+          </div>
+
+          <div class="formula-item">
+            <strong>2. Total Daily Energy</strong>
+            Total daily energy = Sum of all appliance energies in Wh/day
+          </div>
+
+          <div class="formula-item">
+            <strong>3. Panel Size</strong>
+            Panel power needed = Total daily energy ÷ Peak sun hours ÷ 0.85
+          </div>
+
+          <div class="formula-item">
+            <strong>4. Battery Capacity</strong>
+            Battery energy = Total daily energy × 1 day autonomy
+          </div>
+
+          <div class="formula-item">
+            <strong>5. Inverter Size</strong>
+            Inverter power = Total running load × 1.2, then convert to kVA
+          </div>
+
+          <div class="formula-item">
+            <strong>6. Estimated Current</strong>
+            Current = Total power ÷ System voltage. Here system voltage is 24V
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOURS OVERLAY -->
+    <div class="overlay" id="overlay">
+      <div class="side-panel">
+        <button class="back-circle" id="closeOverlayBtn">←</button>
+
+        <div class="overlay-head">Daily Time Of Use</div>
+        <div class="overlay-sub">Add here your estimated hours of use for a particular appliance selected</div>
+
+        <div class="selected-name" id="selectedApplianceName">LED Bulb</div>
+        <div class="selected-power" id="selectedAppliancePower">3W-15W</div>
+
+        <div class="hour-box">
+          <div class="hour-display" id="hourDisplay">6 hrs</div>
+        </div>
+
+        <div class="hour-controls">
+          <button class="hour-btn" id="minusBtn">-</button>
+          <button class="hour-btn" id="plusBtn">+</button>
+        </div>
+
+        <button class="primary-btn" id="addApplianceBtn">ADD APPLIANCE</button>
+        <div class="note-text" id="overlayNote"></div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active" data-page="homePage">
+        <div class="icon">⌂</div>
+        <div>Home</div>
+      </div>
+      <div class="nav-item" data-page="resultsPage">
+        <div class="icon">🧮</div>
+        <div>Calculator</div>
+      </div>
+      <div class="nav-item" data-page="myListPage">
+        <div class="icon">☰</div>
+        <div>My List</div>
+      </div>
+      <div class="nav-item" data-page="recommendPage">
+        <div class="icon">🗓</div>
+        <div>Recommend</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const appliances = [
+      { name: "LED Bulb", powerMin: 3, powerMax: 15, displayPower: "3W-15W", category: "Lighting", icon: "💡", tag: "Solar Friendly", price: "UGX 15,000 - 35,000" },
+      { name: "Television", powerMin: 40, powerMax: 150, displayPower: "40W-150W", category: "Entertainment", icon: "📺", tag: "Common Use", price: "UGX 250,000 - 1,200,000" },
+      { name: "Decoder", powerMin: 20, powerMax: 35, displayPower: "20W-35W", category: "Entertainment", icon: "📦", tag: "Low Power", price: "UGX 120,000 - 300,000" },
+      { name: "Fridge", powerMin: 100, powerMax: 300, displayPower: "100W-300W", category: "Refrigeration", icon: "🧊", tag: "High Demand", price: "UGX 700,000 - 2,500,000" },
+      { name: "Washing Machine", powerMin: 300, powerMax: 800, displayPower: "300W-800W", category: "House Hold", icon: "🧺", tag: "Heavy Load", price: "UGX 800,000 - 2,200,000" },
+      { name: "Flat Iron", powerMin: 1000, powerMax: 1500, displayPower: "1000W-1500W", category: "House Hold", icon: "🧷", tag: "Very High Use", price: "UGX 60,000 - 180,000" },
+      { name: "Vacuum Cleaner", powerMin: 600, powerMax: 1500, displayPower: "600W-1500W", category: "House Hold", icon: "🧹", tag: "Very High Use", price: "UGX 250,000 - 900,000" },
+      { name: "Kettle", powerMin: 1000, powerMax: 2200, displayPower: "1000W-2200W", category: "Kitchen", icon: "🫖", tag: "Very High Use", price: "UGX 80,000 - 250,000" },
+      { name: "Microwave", powerMin: 800, powerMax: 1500, displayPower: "800W-1500W", category: "Kitchen", icon: "📻", tag: "Heavy Load", price: "UGX 300,000 - 1,200,000" },
+      { name: "Blender", powerMin: 300, powerMax: 700, displayPower: "300W-700W", category: "Kitchen", icon: "🥤", tag: "Medium Load", price: "UGX 90,000 - 350,000" },
+      { name: "Rice Cooker", powerMin: 400, powerMax: 1000, displayPower: "400W-1000W", category: "Kitchen", icon: "🍚", tag: "Medium Load", price: "UGX 120,000 - 400,000" },
+      { name: "Fan", powerMin: 40, powerMax: 80, displayPower: "40W-80W", category: "Cooling", icon: "🌀", tag: "Solar Friendly", price: "UGX 90,000 - 300,000" },
+      { name: "Air Conditioner", powerMin: 900, powerMax: 2000, displayPower: "900W-2000W", category: "Cooling", icon: "❄", tag: "Very High Use", price: "UGX 1,500,000 - 4,500,000" },
+      { name: "Laptop", powerMin: 45, powerMax: 100, displayPower: "45W-100W", category: "Office", icon: "💻", tag: "Low Power", price: "UGX 800,000 - 3,500,000" },
+      { name: "Desktop", powerMin: 150, powerMax: 300, displayPower: "150W-300W", category: "Office", icon: "🖥", tag: "Medium Load", price: "UGX 900,000 - 4,000,000" },
+      { name: "Router", powerMin: 5, powerMax: 20, displayPower: "5W-20W", category: "Office", icon: "📡", tag: "Solar Friendly", price: "UGX 120,000 - 350,000" },
+      { name: "Phone Charger", powerMin: 5, powerMax: 20, displayPower: "5W-20W", category: "Office", icon: "🔌", tag: "Low Power", price: "UGX 20,000 - 80,000" }
+    ];
+
+    let selectedCategory = "all";
+    let currentHours = 6;
+    let currentAppliance = null;
+    let myList = [];
+
+    const introPage = document.getElementById("introPage");
+    const getStartedBtn = document.getElementById("getStartedBtn");
+
+    const pages = document.querySelectorAll(".app-page");
+    const navItems = document.querySelectorAll(".nav-item");
+
+    const applianceGrid = document.getElementById("applianceGrid");
+    const searchInput = document.getElementById("searchInput");
+    const chips = document.querySelectorAll(".chip");
+
+    const overlay = document.getElementById("overlay");
+    const selectedApplianceName = document.getElementById("selectedApplianceName");
+    const selectedAppliancePower = document.getElementById("selectedAppliancePower");
+    const hourDisplay = document.getElementById("hourDisplay");
+    const minusBtn = document.getElementById("minusBtn");
+    const plusBtn = document.getElementById("plusBtn");
+    const addApplianceBtn = document.getElementById("addApplianceBtn");
+    const closeOverlayBtn = document.getElementById("closeOverlayBtn");
+    const overlayNote = document.getElementById("overlayNote");
+
+    const myListCard = document.getElementById("myListCard");
+    const clearListBtn = document.getElementById("clearListBtn");
+    const showResultsBtn = document.getElementById("showResultsBtn");
+
+    const applianceCountText = document.getElementById("applianceCountText");
+    const totalEnergyWhText = document.getElementById("totalEnergyWhText");
+    const totalEnergyKwhText = document.getElementById("totalEnergyKwhText");
+    const panelPowerText = document.getElementById("panelPowerText");
+    const batteryText = document.getElementById("batteryText");
+    const inverterText = document.getElementById("inverterText");
+    const currentText = document.getElementById("currentText");
+    const selectedTable = document.getElementById("selectedTable");
+    const totalTableWhText = document.getElementById("totalTableWhText");
+    const calculateAgainBtn = document.getElementById("calculateAgainBtn");
+    const viewRecommendationsBtn = document.getElementById("viewRecommendationsBtn");
+    const editListBtn = document.getElementById("editListBtn");
+
+    const smartRecommendationText = document.getElementById("smartRecommendationText");
+    const recommendPanelText = document.getElementById("recommendPanelText");
+    const recommendPanelSub = document.getElementById("recommendPanelSub");
+    const recommendBatteryText = document.getElementById("recommendBatteryText");
+    const recommendBatterySub = document.getElementById("recommendBatterySub");
+    const recommendInverterText = document.getElementById("recommendInverterText");
+
+    const SYSTEM_VOLTAGE = 24;
+    const PEAK_SUN_HOURS = 5.5;
+    const LOSS_FACTOR = 0.85;
+    const BATTERY_DOD = 0.8;
+    const AUTONOMY_DAYS = 1;
+
+    getStartedBtn.addEventListener("click", () => {
+      introPage.style.display = "none";
+      showPage("homePage");
+    });
+
+    function showPage(pageId) {
+      pages.forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+
+      navItems.forEach(item => {
+        item.classList.toggle("active", item.dataset.page === pageId);
+      });
+
+      if (pageId === "myListPage") renderMyList();
+      if (pageId === "resultsPage") renderResults();
+      if (pageId === "recommendPage") renderRecommendations();
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const pageId = item.dataset.page;
+        if (pageId === "resultsPage") {
+          renderResults();
+        }
+        if (pageId === "recommendPage") {
+          renderRecommendations();
+        }
+        if (pageId === "myListPage") {
+          renderMyList();
+        }
+        showPage(pageId);
+      });
+    });
+
+    function createCard(item, index) {
+      return `
+        <div class="card appliance-card">
+          <div>
+            <div class="card-icon">${item.icon}</div>
+            <div class="card-name">${item.name}</div>
+            <div class="card-power">${item.displayPower}</div>
+          </div>
+          <div>
+            <div class="card-row">
+              <div class="tag"><span>☀</span><span>${item.tag}</span></div>
+              <button class="go-btn" onclick="openOverlay(${index})">›</button>
+            </div>
+            <div class="price">${item.price}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCards() {
+      const searchValue = searchInput.value.toLowerCase().trim();
+
+      const filtered = appliances
+        .map((item, index) => ({ ...item, originalIndex: index }))
+        .filter(item => {
+          const matchCategory = selectedCategory === "all" || item.category === selectedCategory;
+          const matchSearch =
+            item.name.toLowerCase().includes(searchValue) ||
+            item.category.toLowerCase().includes(searchValue) ||
+            item.displayPower.toLowerCase().includes(searchValue);
+          return matchCategory && matchSearch;
+        });
+
+      applianceGrid.innerHTML = filtered.map(item => createCard(item, item.originalIndex)).join("");
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(btn => btn.classList.remove("active"));
+        chip.classList.add("active");
+        selectedCategory = chip.dataset.category;
+        renderCards();
+      });
+    });
+
+    searchInput.addEventListener("input", renderCards);
+
+    function updateHourDisplay() {
+      hourDisplay.textContent = currentHours + " hrs";
+    }
+
+    window.openOverlay = function (index) {
+      currentAppliance = appliances[index];
+      currentHours = 6;
+      selectedApplianceName.textContent = currentAppliance.name;
+      selectedAppliancePower.textContent = currentAppliance.displayPower;
+      overlayNote.textContent = "";
+      updateHourDisplay();
+      overlay.classList.add("show");
+    };
+
+    function closeOverlay() {
+      overlay.classList.remove("show");
+    }
+
+    closeOverlayBtn.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeOverlay();
+    });
+
+    minusBtn.addEventListener("click", () => {
+      if (currentHours > 1) {
+        currentHours--;
+        updateHourDisplay();
+      }
+    });
+
+    plusBtn.addEventListener("click", () => {
+      if (currentHours < 24) {
+        currentHours++;
+        updateHourDisplay();
+      }
+    });
+
+    function averagePower(item) {
+      return (item.powerMin + item.powerMax) / 2;
+    }
+
+    addApplianceBtn.addEventListener("click", () => {
+      if (!currentAppliance) return;
+
+      myList.push({
+        name: currentAppliance.name,
+        category: currentAppliance.category,
+        displayPower: currentAppliance.displayPower,
+        avgPower: averagePower(currentAppliance),
+        hours: currentHours,
+        dailyEnergy: averagePower(currentAppliance) * currentHours
+      });
+
+      overlayNote.textContent = currentAppliance.name + " added successfully";
+      renderMyList();
+      setTimeout(() => {
+        closeOverlay();
+      }, 450);
+    });
+
+    function renderMyList() {
+      if (myList.length === 0) {
+        myListCard.innerHTML = `
+          <div class="list-empty">
+            No appliance added yet.<br>
+            Go to Home and add appliances first.
+          </div>
+        `;
+        return;
+      }
+
+      myListCard.innerHTML = myList.map((item, index) => `
+        <div class="list-row">
+          <div class="list-left">
+            <div class="list-name">${item.name}</div>
+            <div class="list-meta">${item.displayPower} • ${item.hours} hrs/day</div>
+          </div>
+          <div class="list-energy">${Math.round(item.dailyEnergy)} Wh/day</div>
+        </div>
+      `).join("");
+    }
+
+    clearListBtn.addEventListener("click", () => {
+      myList = [];
+      renderMyList();
+      renderResults();
+      renderRecommendations();
+    });
+
+    showResultsBtn.addEventListener("click", () => {
+      renderResults();
+      showPage("resultsPage");
+    });
+
+    calculateAgainBtn.addEventListener("click", () => {
+      showPage("homePage");
+    });
+
+    editListBtn.addEventListener("click", () => {
+      showPage("myListPage");
+    });
+
+    viewRecommendationsBtn.addEventListener("click", () => {
+      renderRecommendations();
+      showPage("recommendPage");
+    });
+
+    function calculateSystem() {
+      const totalEnergyWh = myList.reduce((sum, item) => sum + item.dailyEnergy, 0);
+      const totalPowerW = myList.reduce((sum, item) => sum + item.avgPower, 0);
+
+      const panelPowerWp = totalEnergyWh > 0 ? totalEnergyWh / PEAK_SUN_HOURS / LOSS_FACTOR : 0;
+      const batteryKwh = totalEnergyWh > 0 ? (totalEnergyWh * AUTONOMY_DAYS) / 1000 / BATTERY_DOD : 0;
+      const inverterKva = totalPowerW > 0 ? ((totalPowerW * 1.2) / 1000) : 0;
+      const estimatedCurrent = totalPowerW > 0 ? totalPowerW / SYSTEM_VOLTAGE : 0;
+
+      return {
+        totalEnergyWh,
+        totalPowerW,
+        panelPowerWp,
+        batteryKwh,
+        inverterKva,
+        estimatedCurrent
+      };
+    }
+
+    function renderResults() {
+      const calc = calculateSystem();
+
+      applianceCountText.textContent = myList.length;
+      totalEnergyWhText.textContent = `${Math.round(calc.totalEnergyWh).toLocaleString()} Wh/day`;
+      totalEnergyKwhText.textContent = `${(calc.totalEnergyWh / 1000).toFixed(3)} kWh per day`;
+
+      panelPowerText.textContent = `${Math.ceil(calc.panelPowerWp).toLocaleString()} Wp`;
+      batteryText.textContent = `${calc.batteryKwh.toFixed(1)} kWh`;
+      inverterText.textContent = `${calc.inverterKva.toFixed(2)} kVA`;
+      currentText.textContent = `${calc.estimatedCurrent.toFixed(2)} Amps`;
+      totalTableWhText.textContent = `${Math.round(calc.totalEnergyWh).toLocaleString()} Wh/day`;
+
+      if (myList.length === 0) {
+        selectedTable.innerHTML = `
+          <div class="table-row">
+            <div class="table-name">No appliance selected yet</div>
+            <div class="table-energy">0 Wh/day</div>
+          </div>
+        `;
+        return;
+      }
+
+      selectedTable.innerHTML = myList.map(item => `
+        <div class="table-row">
+          <div class="table-name">
+            ${item.name}<br>
+            <span style="font-weight:700; opacity:0.9;">${item.displayPower}</span>
+          </div>
+          <div class="table-energy">${Math.round(item.dailyEnergy)} Wh/day</div>
+        </div>
+      `).join("");
+    }
+
+    function pickPanelExample(wp) {
+      const rounded = Math.ceil(wp);
+      if (rounded <= 0) return "Example: 1 × 0W panel";
+      if (rounded <= 200) return `Example: 1 × ${Math.ceil(rounded)}W panel`;
+      if (rounded <= 420) return `Example: 2 × ${Math.ceil(rounded / 2)}W panels`;
+      if (rounded <= 840) return `Example: 2 × ${Math.ceil(rounded / 2)}W panels`;
+      return `Example: 3 × ${Math.ceil(rounded / 3)}W panels`;
+    }
+
+    function pickBatteryExample(kwh) {
+      if (kwh <= 0) return "Example: no battery yet";
+      if (kwh <= 2.6) return "Example: 2 × 12V 100Ah batteries";
+      if (kwh <= 5.2) return "Example: 4 × 12V 100Ah batteries";
+      if (kwh <= 10.5) return "Example: 2 × 24V 200Ah batteries";
+      return "Example: 4 × 24V 200Ah batteries";
+    }
+
+    function smartMessage(totalWh) {
+      if (totalWh <= 0) return "Add Appliances To Get A Smart Recommendation";
+      if (totalWh < 1500) return "A Small Solar System Will Perfectly Power Your House!";
+      if (totalWh < 4000) return "A Medium Solar System Is Best For Your Daily Needs!";
+      return "A Bigger Solar System Is Recommended For Your Heavy Loads!";
+    }
+
+    function renderRecommendations() {
+      const calc = calculateSystem();
+
+      smartRecommendationText.textContent = smartMessage(calc.totalEnergyWh);
+      recommendPanelText.textContent = `${Math.ceil(calc.panelPowerWp).toLocaleString()} Wp`;
+      recommendPanelSub.textContent = pickPanelExample(calc.panelPowerWp);
+
+      recommendBatteryText.textContent = `${calc.batteryKwh.toFixed(1)} kWh`;
+      recommendBatterySub.textContent = pickBatteryExample(calc.batteryKwh);
+
+      recommendInverterText.textContent = `${calc.inverterKva.toFixed(2)} kVA`;
+    }
+
+    renderCards();
+    renderMyList();
+    renderResults();
+    renderRecommendations();
+  </script>
+</body>
+
+</html>
