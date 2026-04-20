@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solar Home App</title>
 
+  <meta name="theme-color" content="#241F8F" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
   <style>
     :root {
       --yellow: #F3C332;
@@ -860,6 +865,7 @@
       }
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -1048,8 +1054,8 @@
             system.</div>
         </div>
 
-        <button class="primary-btn" style="margin-bottom:10px;">Save Recommendation</button>
-        <button class="outline-btn" style="height:46px;">Share Results</button>
+        <button class="primary-btn" id="saveRecommendationBtn" style="margin-bottom:10px;">Save Recommendation</button>
+        <button class="outline-btn" id="shareResultsBtn" style="height:46px;">Share Results</button>
 
         <div class="card formula-card">
           <div class="formula-title">Formulas Used</div>
@@ -1202,6 +1208,9 @@
     const recommendBatteryText = document.getElementById("recommendBatteryText");
     const recommendBatterySub = document.getElementById("recommendBatterySub");
     const recommendInverterText = document.getElementById("recommendInverterText");
+
+    const saveRecommendationBtn = document.getElementById("saveRecommendationBtn");
+    const shareResultsBtn = document.getElementById("shareResultsBtn");
 
     const SYSTEM_VOLTAGE = 24;
     const PEAK_SUN_HOURS = 5.5;
@@ -1397,6 +1406,10 @@
       showPage("recommendPage");
     });
 
+    saveRecommendationBtn.addEventListener("click", saveRecommendationAsPDF);
+
+    shareResultsBtn.addEventListener("click", shareResults);
+
     function calculateSystem() {
       const totalEnergyWh = myList.reduce((sum, item) => sum + item.dailyEnergy, 0);
       const totalPowerW = myList.reduce((sum, item) => sum + item.avgPower, 0);
@@ -1474,6 +1487,121 @@
       return "A Bigger Solar System Is Recommended For Your Heavy Loads!";
     }
 
+    function buildResultsSummary() {
+      const calc = calculateSystem();
+      return {
+        totalEnergyWh: Math.round(calc.totalEnergyWh),
+        totalEnergyKwh: (calc.totalEnergyWh / 1000).toFixed(3),
+        panelPowerWp: Math.ceil(calc.panelPowerWp),
+        batteryKwh: calc.batteryKwh.toFixed(1),
+        inverterKva: calc.inverterKva.toFixed(2),
+        estimatedCurrent: calc.estimatedCurrent.toFixed(2),
+        applianceCount: myList.length,
+        recommendation: smartMessage(calc.totalEnergyWh),
+        panelExample: pickPanelExample(calc.panelPowerWp),
+        batteryExample: pickBatteryExample(calc.batteryKwh)
+      };
+    }
+
+    function saveRecommendationAsPDF() {
+      const summary = buildResultsSummary();
+      const jsPDFLib = window.jspdf;
+
+      if (!jsPDFLib || !jsPDFLib.jsPDF) {
+        alert("PDF library not loaded yet. Please try again in a moment.");
+        return;
+      }
+
+      const { jsPDF } = jsPDFLib;
+      const doc = new jsPDF();
+      let y = 20;
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.text("Solar Home Recommendation", 14, y);
+      y += 10;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 14, y);
+      y += 10;
+
+      const lines = [
+        `Selected appliances: ${summary.applianceCount}`,
+        `Total daily energy: ${summary.totalEnergyWh.toLocaleString()} Wh/day (${summary.totalEnergyKwh} kWh/day)`,
+        `Panel power needed: ${summary.panelPowerWp.toLocaleString()} Wp`,
+        `Battery capacity: ${summary.batteryKwh} kWh`,
+        `Inverter size: ${summary.inverterKva} kVA`,
+        `Estimated current: ${summary.estimatedCurrent} Amps`,
+        `Smart recommendation: ${summary.recommendation}`,
+        `Panel example: ${summary.panelExample}`,
+        `Battery example: ${summary.batteryExample}`
+      ];
+
+      lines.forEach(line => {
+        const wrapped = doc.splitTextToSize(line, 180);
+        doc.text(wrapped, 14, y);
+        y += wrapped.length * 7;
+      });
+
+      y += 4;
+      doc.setFont("helvetica", "bold");
+      doc.text("Appliance List", 14, y);
+      y += 8;
+      doc.setFont("helvetica", "normal");
+
+      if (myList.length === 0) {
+        doc.text("No appliances added yet.", 14, y);
+      } else {
+        myList.forEach((item, index) => {
+          const line = `${index + 1}. ${item.name} - ${item.displayPower} - ${item.hours} hrs/day - ${Math.round(item.dailyEnergy)} Wh/day`;
+          const wrapped = doc.splitTextToSize(line, 180);
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(wrapped, 14, y);
+          y += wrapped.length * 7;
+        });
+      }
+
+      doc.save("solar-home-recommendation.pdf");
+    }
+
+    async function shareResults() {
+      const summary = buildResultsSummary();
+      const shareText =
+        `Solar Home Results\n` +
+        `Energy: ${summary.totalEnergyWh.toLocaleString()} Wh/day (${summary.totalEnergyKwh} kWh/day)\n` +
+        `Panels: ${summary.panelPowerWp.toLocaleString()} Wp\n` +
+        `Battery: ${summary.batteryKwh} kWh\n` +
+        `Inverter: ${summary.inverterKva} kVA\n` +
+        `Recommendation: ${summary.recommendation}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Solar Home Results",
+            text: shareText,
+            url: window.location.href
+          });
+        } catch (error) {
+          if (error.name !== "AbortError") {
+            alert("Sharing failed. Please try again.");
+          }
+        }
+      } else if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(`${shareText}\n${window.location.href}`);
+          alert("Results and link copied. You can now paste and share them.");
+        } catch (error) {
+          alert("Sharing is not supported on this device.");
+        }
+      } else {
+        alert("Sharing is not supported on this device.");
+      }
+    }
+
     function renderRecommendations() {
       const calc = calculateSystem();
 
@@ -1492,6 +1620,17 @@
     renderResults();
     renderRecommendations();
   </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+          console.log("Service worker registration failed:", error);
+        });
+      });
+    }
+  </script>
+
 </body>
 
 </html>
