@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,60 +8,1686 @@
   <meta name="theme-color" content="#2563EB" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    :root{
-      --blue:#2563EB;
-      --blue-dark:#1E2A78;
-      --blue-soft:#EAF2FF;
-      --yellow:#F3C332;
-      --green:#20C997;
-      --green-soft:#E7FFF6;
-      --white:#FFFFFF;
-      --bg:#F7FAFF;
-      --text:#172033;
-      --muted:#7A8499;
-      --line:#E7ECF5;
-      --shadow:0 18px 45px rgba(31,42,120,.12);
-      --shadow-soft:0 10px 24px rgba(37,99,235,.10);
-      --radius:28px;
+    :root {
+      --blue: #2563EB;
+      --blue-dark: #1E2A78;
+      --blue-soft: #EAF2FF;
+      --yellow: #F3C332;
+      --green: #20C997;
+      --green-soft: #E7FFF6;
+      --white: #FFFFFF;
+      --bg: #F7FAFF;
+      --text: #172033;
+      --muted: #7A8499;
+      --line: #E7ECF5;
+      --shadow: 0 18px 45px rgba(31, 42, 120, .12);
+      --shadow-soft: 0 10px 24px rgba(37, 99, 235, .10);
+      --radius: 28px;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,Helvetica,sans-serif;-webkit-tap-highlight-color:transparent}
-    html,body{width:100%;min-height:100%;overflow-x:hidden;background:radial-gradient(circle at 12% 8%,rgba(32,201,151,.22),transparent 28%),radial-gradient(circle at 85% 0%,rgba(243,195,50,.20),transparent 25%),linear-gradient(135deg,#eef7ff,#ffffff 46%,#f3fff9)}
-    body{min-height:100vh;min-height:100dvh;display:block;padding:0;color:var(--text);background:var(--bg)}
-    button,input,select{font:inherit}
-    button{cursor:pointer;border:none}
-    .phone{width:100%;max-width:none;height:100vh;height:100dvh;background:var(--bg);border-radius:0;overflow:hidden;position:relative;box-shadow:none;border:0}
-    .phone:before{display:none}
-    .status{display:none}
-    .app-page{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg);animation:pageIn .28s ease both}
-    .app-page.active{display:flex}
-    @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    .content{flex:1;overflow-y:auto;padding:24px clamp(16px,4vw,34px) 104px;scrollbar-width:none;max-width:720px;width:100%;margin:0 auto}.content::-webkit-scrollbar{display:none}
-    .top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.brand-mini{display:flex;align-items:center;gap:10px}.brand-icon{width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,var(--yellow),#FFE18A);display:grid;place-items:center;color:var(--blue-dark);font-size:22px;box-shadow:var(--shadow-soft)}.eyebrow{font-size:11px;font-weight:900;color:var(--green);text-transform:uppercase;letter-spacing:.8px}.title{font-size:25px;font-weight:950;color:var(--text);line-height:1.05}.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:grid;place-items:center;color:#fff;font-weight:950;box-shadow:var(--shadow-soft)}
-    .hero{padding:22px;border-radius:32px;background:linear-gradient(145deg,var(--blue-dark),var(--blue));color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;margin-bottom:16px}.hero:before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:rgba(32,201,151,.26);right:-50px;top:-60px}.hero:after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(243,195,50,.22);left:-55px;bottom:-70px}.hero>*{position:relative}.hero h1{font-size:28px;line-height:1.05;margin-bottom:8px}.hero p{font-size:12px;line-height:1.5;color:rgba(255,255,255,.84);max-width:280px}.hero-actions{display:flex;gap:10px;margin-top:18px}.btn{height:46px;border-radius:18px;padding:0 16px;font-weight:950;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.22s ease}.btn:active,.chip:active,.icon-btn:active{transform:scale(.97)}.btn-primary{background:var(--blue);color:#fff;box-shadow:0 12px 24px rgba(37,99,235,.24)}.btn-yellow{background:var(--yellow);color:var(--blue-dark)}.btn-green{background:var(--green);color:#fff}.btn-ghost{background:#fff;color:var(--blue-dark);border:1px solid var(--line)}.btn-outline{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
-    .search-box{height:50px;background:#fff;border:1px solid var(--line);border-radius:20px;display:flex;align-items:center;gap:10px;padding:0 15px;box-shadow:var(--shadow-soft);margin-bottom:12px}.search-box svg{width:18px;color:var(--blue)}.search-input{flex:1;border:0;background:transparent;outline:0;color:var(--text);font-size:14px}.search-input::placeholder{color:#A0A8BA}.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{height:36px;border-radius:999px;padding:0 14px;background:#fff;color:var(--muted);font-size:12px;font-weight:900;border:1px solid var(--line);white-space:nowrap;transition:.2s ease}.chip.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 10px 20px rgba(37,99,235,.18)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow-soft);transition:.22s ease}.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.appliance-card{min-height:170px;padding:15px;display:flex;flex-direction:column;justify-content:space-between}.appliance-top{display:flex;justify-content:space-between;gap:10px}.appliance-icon{width:46px;height:46px;border-radius:18px;background:var(--blue-soft);display:grid;place-items:center;color:var(--blue);font-size:24px}.appliance-card:nth-child(3n) .appliance-icon{background:var(--green-soft);color:var(--green)}.appliance-card:nth-child(4n) .appliance-icon{background:#FFF8DF;color:#BD8500}.card-name{font-size:15px;font-weight:950;line-height:1.08;margin-top:12px}.card-power{font-size:12px;font-weight:900;color:var(--blue);margin-top:5px}.tag{display:inline-flex;align-items:center;gap:5px;background:var(--green-soft);color:#149B73;font-size:10px;font-weight:950;padding:6px 9px;border-radius:999px;margin-top:10px}.price{font-size:10px;line-height:1.3;color:var(--muted);font-weight:800;margin-top:8px}.icon-btn{width:40px;height:40px;border-radius:16px;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:20px;box-shadow:0 10px 18px rgba(37,99,235,.18);transition:.2s ease}
-    .section-head{display:flex;justify-content:space-between;align-items:end;margin:18px 0 10px}.section-title{font-size:18px;font-weight:950;color:var(--text)}.small-sub{font-size:12px;color:var(--muted);line-height:1.45;margin-top:3px}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metric{padding:15px}.metric-label{font-size:10px;text-transform:uppercase;font-weight:950;color:var(--muted);letter-spacing:.5px}.metric-value{font-size:20px;font-weight:950;color:var(--blue-dark);margin-top:7px;line-height:1.1}.metric-note{font-size:10px;color:var(--muted);font-weight:800;margin-top:8px;line-height:1.35}.metric.main{grid-column:1/-1;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff}.metric.main .metric-label,.metric.main .metric-note{color:rgba(255,255,255,.82)}.metric.main .metric-value{color:#fff;font-size:28px}.pill{display:inline-flex;background:#FFF4C7;color:#866000;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:950;margin-top:9px}
-    .custom-card{padding:16px;margin-bottom:14px;background:linear-gradient(180deg,#fff,#fbfdff)}.custom-head{display:flex;gap:11px;align-items:center;margin-bottom:13px}.custom-badge{width:42px;height:42px;border-radius:17px;background:linear-gradient(135deg,var(--green),var(--blue));display:grid;place-items:center;color:#fff;font-size:22px}.custom-title{font-weight:950;color:var(--text);font-size:15px}.custom-sub{font-size:11px;color:var(--muted);font-weight:700;line-height:1.4;margin-top:2px}.custom-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:8px;margin-bottom:10px}.field label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:950;margin:0 0 6px 4px}.field input{width:100%;height:42px;border:1px solid var(--line);border-radius:16px;background:#fff;padding:0 11px;color:var(--text);outline:0;font-size:12px;font-weight:850}.field input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.10)}
-    .list-card{padding:6px;margin-top:12px}.list-empty{text-align:center;padding:22px 16px;color:var(--muted);font-size:13px;line-height:1.5}.list-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 10px;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.list-name{font-size:14px;font-weight:950}.list-meta{font-size:11px;color:var(--muted);font-weight:800;line-height:1.4;margin-top:4px}.list-energy{font-size:12px;font-weight:950;color:var(--blue);text-align:right;white-space:nowrap}.remove-btn{margin-top:8px;background:#FFF1F1;color:#D03939;border-radius:999px;padding:6px 10px;font-size:10px;font-weight:950}.action-row{display:flex;gap:10px;margin-top:12px}.action-row .btn{flex:1}.table-card{overflow:hidden}.table-head{display:flex;justify-content:space-between;padding:14px 14px 6px;font-size:11px;font-weight:950;color:var(--muted);text-transform:uppercase}.table-row{display:flex;justify-content:space-between;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}.table-name{font-size:12px;font-weight:900;line-height:1.3}.table-energy{font-size:12px;font-weight:950;color:var(--blue);white-space:nowrap}.total-row{display:flex;justify-content:space-between;padding:13px 14px;background:var(--blue-soft);color:var(--blue-dark);font-weight:950}
-    .rec-card{padding:16px;margin-bottom:12px}.rec-hero{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;position:relative;overflow:hidden}.rec-hero:before{content:"";position:absolute;width:145px;height:145px;border-radius:50%;background:rgba(32,201,151,.26);right:-45px;top:-42px}.rec-hero>*{position:relative}.rec-title{font-size:20px;font-weight:950;line-height:1.2;color:var(--yellow)}.rec-text{font-size:12px;color:rgba(255,255,255,.84);line-height:1.45;margin-top:8px}.recommend-card{display:grid;grid-template-columns:1fr 86px;gap:12px;padding:15px;margin-bottom:12px}.recommend-name{font-size:11px;font-weight:950;color:var(--muted);text-transform:uppercase}.recommend-value{font-size:20px;color:var(--blue-dark);font-weight:950;margin:6px 0}.recommend-sub{font-size:11px;color:var(--muted);font-weight:800;line-height:1.35}.tip-box{border-radius:20px;background:var(--green-soft);color:#0C8D68;padding:10px}.tip-title{font-size:11px;font-weight:950;margin-bottom:5px}.tip-text{font-size:10px;line-height:1.35;font-weight:750}.formula-card{padding:16px;margin-top:12px}.formula-title{font-size:13px;color:var(--blue);font-weight:950;margin-bottom:10px}.formula-item{font-size:11px;line-height:1.45;color:var(--muted);font-weight:750;margin-bottom:10px}.formula-item strong{display:block;color:var(--text);font-size:11px;margin-bottom:2px}
-    .bottom-nav{position:absolute;left:clamp(10px,4vw,34px);right:clamp(10px,4vw,34px);bottom:12px;height:72px;max-width:720px;margin:0 auto;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);border:1px solid rgba(231,236,245,.9);border-radius:28px;display:flex;justify-content:space-around;align-items:center;z-index:50;box-shadow:0 18px 40px rgba(23,32,51,.16)}.nav-item{width:25%;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);font-size:10px;font-weight:900;cursor:pointer;transition:.22s ease}.nav-item .icon{width:30px;height:30px;border-radius:13px;display:grid;place-items:center;color:inherit}.nav-item.active{color:var(--blue)}.nav-item.active .icon{background:var(--blue);color:#fff;box-shadow:0 8px 16px rgba(37,99,235,.20);transform:translateY(-2px)}
-    .auth-bg{background:linear-gradient(145deg,#ffffff 0%,#ffffff 58%,#E8FFF6 100%)}.auth-card{width:100%;padding:18px 10px}.auth-title{text-align:center;font-size:23px;font-weight:950;margin:18px 0 24px;color:#262B35}.auth-form{display:grid;gap:12px}.auth-input{height:48px;border-radius:999px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:9px;padding:0 16px;box-shadow:0 8px 18px rgba(23,32,51,.04)}.auth-input svg{width:16px;color:#A1AABD}.auth-input input{border:0;outline:0;flex:1;font-size:12px;color:var(--text);background:transparent}.auth-input input::placeholder{color:#9AA4B7}.auth-links{display:flex;justify-content:flex-end;margin:2px 4px 4px}.auth-links span{font-size:10px;font-weight:850;color:var(--blue);cursor:pointer}.or{display:flex;align-items:center;gap:9px;margin:16px 0;color:#A4ACBA;font-size:11px;font-weight:900}.or:before,.or:after{content:"";height:1px;background:var(--line);flex:1}.social-row{display:flex;justify-content:center;gap:18px}.social{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-weight:950;box-shadow:var(--shadow-soft)}.social.x{background:#111;color:#fff}.social.f{color:#1877F2}.social.g{color:#EA4335}.auth-switch{text-align:center;font-size:11px;color:var(--muted);font-weight:800;margin-top:18px}.auth-switch span{color:var(--blue);font-weight:950;cursor:pointer}.terms{display:flex;gap:8px;align-items:flex-start;font-size:9px;color:var(--muted);font-weight:800;line-height:1.35}.terms input{margin-top:1px}.back-small{width:38px;height:38px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:#333}
-    .profile-hero{padding:18px;border-radius:32px;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;box-shadow:var(--shadow);margin-bottom:12px}.profile-avatar{width:82px;height:82px;border-radius:28px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:28px;font-weight:950;margin-bottom:12px;overflow:hidden;border:2px solid rgba(255,255,255,.45)}.profile-avatar img,.avatar img{width:100%;height:100%;object-fit:cover;display:block}.avatar{overflow:hidden}.profile-name{font-size:22px;font-weight:950}.profile-email{font-size:12px;color:rgba(255,255,255,.84);font-weight:800;margin-top:4px}.profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}.pstat{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:10px;text-align:center}.pstat strong{display:block;font-size:15px}.pstat span{font-size:9px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.78)}.profile-card{padding:16px;margin-bottom:12px}.database-box{background:#0F172A;color:#DCE7FF;border-radius:22px;padding:12px;font-family:Consolas,monospace;font-size:10px;line-height:1.45;overflow:auto;max-height:160px;margin-top:10px}.profile-form{display:grid;gap:10px;margin-top:12px}
-    .overlay{position:absolute;inset:0;background:rgba(15,23,42,.24);z-index:70;opacity:0;pointer-events:none;transition:.28s ease;backdrop-filter:blur(6px)}.overlay.show{opacity:1;pointer-events:auto}.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:32px 32px 0 0;padding:22px 20px 30px;transform:translateY(110%);transition:.34s cubic-bezier(.2,.8,.2,1);box-shadow:0 -22px 55px rgba(23,32,51,.22)}.overlay.show .sheet{transform:translateY(0)}.sheet-handle{width:46px;height:5px;border-radius:999px;background:#DEE5F0;margin:0 auto 18px}.selected-name{font-size:22px;font-weight:950;text-align:center}.selected-power{text-align:center;color:var(--muted);font-weight:850;margin-top:5px}.hour-box{height:86px;border-radius:26px;background:var(--blue-soft);display:grid;place-items:center;margin:18px 0}.hour-display{font-size:34px;font-weight:950;color:var(--blue)}.hour-controls{display:flex;justify-content:center;gap:14px;margin-bottom:18px}.hour-btn{width:54px;height:54px;border-radius:20px;background:var(--blue);color:#fff;font-size:26px;font-weight:950}.close-x{position:absolute;right:18px;top:18px;width:36px;height:36px;border-radius:14px;background:#F3F6FB;color:var(--text);font-size:18px}
-    .toast-wrap{position:absolute;top:54px;left:16px;right:16px;z-index:100;display:grid;gap:8px;pointer-events:none}.toast{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:20px;padding:12px;box-shadow:var(--shadow);animation:toastIn .25s ease both}.toast.error{border-left-color:#EF4444}.toast-icon{width:30px;height:30px;border-radius:12px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-weight:950;flex:0 0 30px}.toast.error .toast-icon{background:#FFF1F1;color:#EF4444}.toast-title{font-size:12px;font-weight:950}.toast-message{font-size:11px;color:var(--muted);font-weight:750;line-height:1.35;margin-top:2px}.toast.hide{animation:toastOut .22s ease both}@keyframes toastIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.98)}}
-    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.admin-card{padding:16px}.admin-value{font-size:25px;font-weight:950;color:var(--blue-dark);margin-top:6px}.admin-label{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:950;letter-spacing:.5px}.user-card{padding:14px;margin-bottom:10px}.user-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.user-name{font-size:14px;font-weight:950;color:var(--text)}.user-email{font-size:11px;color:var(--muted);font-weight:800;margin-top:3px}.user-pill{font-size:9px;font-weight:950;border-radius:999px;padding:5px 8px;background:var(--blue-soft);color:var(--blue)}.admin-loads{margin-top:10px;font-size:11px;line-height:1.45;color:var(--muted);font-weight:800}.admin-actions{display:flex;gap:10px;margin-top:12px}.admin-actions .btn{flex:1}.owner-only{display:none}.photo-row{display:flex;align-items:center;gap:12px;margin-top:12px}.photo-preview{width:58px;height:58px;border-radius:22px;background:var(--blue-soft);display:grid;place-items:center;color:var(--blue);font-weight:950;overflow:hidden;border:1px solid var(--line)}.photo-preview img{width:100%;height:100%;object-fit:cover}.file-btn{position:relative;overflow:hidden}.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}.hidden{display:none!important}
 
-    .home-hero{display:grid;grid-template-columns:minmax(0,1fr) 210px;align-items:center;gap:18px;padding:24px;background:linear-gradient(135deg,#0F1E63 0%,#2563EB 58%,#20C997 100%)}
-    .home-hero h1{font-size:30px;max-width:360px}.home-hero p{max-width:360px;font-size:13px}.hero-copy{position:relative;z-index:2}.hero-visual{position:relative;z-index:2;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.24);border-radius:28px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.16);backdrop-filter:blur(10px)}.hero-visual img{width:100%;height:auto;display:block;border-radius:22px;object-fit:cover}.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:999px;padding:7px 11px;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}.assistant-strip{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:12px;box-shadow:var(--shadow-soft);margin-bottom:14px}.assistant-strip img{width:74px;height:54px;border-radius:18px;object-fit:cover}.assistant-strip strong{display:block;font-size:14px;color:var(--blue-dark);line-height:1.2}.assistant-strip span{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-top:3px;line-height:1.35}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      -webkit-tap-highlight-color: transparent
+    }
 
-    .system-sketch{padding:16px;margin:12px 0;background:linear-gradient(180deg,#fff,#fbfdff);overflow:hidden}.sketch-wrap{width:100%;overflow:auto;border-radius:22px;background:linear-gradient(135deg,#F8FBFF,#EFF7FF);border:1px solid var(--line);padding:10px}.solar-svg{width:100%;min-width:560px;height:auto;display:block}.sketch-node{filter:drop-shadow(0 8px 14px rgba(37,99,235,.14))}.sketch-line{stroke:#2563EB;stroke-width:3;stroke-linecap:round;stroke-dasharray:8 8;animation:dashFlow 1.25s linear infinite}.sketch-line.ac{stroke:#20C997}.sketch-line.bat{stroke:#F3C332}.sketch-load-dot{animation:popIn .35s ease both}.sketch-note{font-size:11px;fill:#7A8499;font-weight:800}.sketch-label{font-size:12px;fill:#172033;font-weight:950}.sketch-value{font-size:10px;fill:#2563EB;font-weight:900}.sketch-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:var(--blue-soft);color:var(--blue-dark);font-size:10px;font-weight:950;padding:6px 9px;margin:8px 6px 0 0}.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formula-grid .formula-item{background:#F8FBFF;border:1px solid var(--line);border-radius:18px;padding:10px;margin-bottom:0}@keyframes dashFlow{to{stroke-dashoffset:-32}}@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}@media(max-width:480px){.formula-grid{grid-template-columns:1fr}.sketch-wrap{padding:6px}}
-    @media(max-width:700px){.home-hero{grid-template-columns:1fr;padding:22px}.hero-visual{max-width:280px;margin:auto}.home-hero h1{font-size:27px}}
-    @media(max-width:480px){.content{padding:20px 16px 104px}.bottom-nav{left:10px;right:10px;bottom:10px}.grid{gap:10px}.recommend-card{grid-template-columns:1fr}.custom-grid{grid-template-columns:1fr}.hero h1{font-size:26px}}
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 12% 8%, rgba(32, 201, 151, .22), transparent 28%), radial-gradient(circle at 85% 0%, rgba(243, 195, 50, .20), transparent 25%), linear-gradient(135deg, #eef7ff, #ffffff 46%, #f3fff9)
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: block;
+      padding: 0;
+      color: var(--text);
+      background: var(--bg)
+    }
+
+    button,
+    input,
+    select {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer;
+      border: none
+    }
+
+    .phone {
+      width: 100%;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg);
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      box-shadow: none;
+      border: 0
+    }
+
+    .phone:before {
+      display: none
+    }
+
+    .status {
+      display: none
+    }
+
+    .app-page {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+      animation: pageIn .28s ease both
+    }
+
+    .app-page.active {
+      display: flex
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px clamp(16px, 4vw, 34px) 104px;
+      scrollbar-width: none;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto
+    }
+
+    .content::-webkit-scrollbar {
+      display: none
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px
+    }
+
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--yellow), #FFE18A);
+      display: grid;
+      place-items: center;
+      color: var(--blue-dark);
+      font-size: 22px;
+      box-shadow: var(--shadow-soft)
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: .8px
+    }
+
+    .title {
+      font-size: 25px;
+      font-weight: 950;
+      color: var(--text);
+      line-height: 1.05
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 950;
+      box-shadow: var(--shadow-soft)
+    }
+
+    .hero {
+      padding: 22px;
+      border-radius: 32px;
+      background: linear-gradient(145deg, var(--blue-dark), var(--blue));
+      color: #fff;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px
+    }
+
+    .hero:before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: rgba(32, 201, 151, .26);
+      right: -50px;
+      top: -60px
+    }
+
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(243, 195, 50, .22);
+      left: -55px;
+      bottom: -70px
+    }
+
+    .hero>* {
+      position: relative
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      line-height: 1.05;
+      margin-bottom: 8px
+    }
+
+    .hero p {
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, .84);
+      max-width: 280px
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px
+    }
+
+    .btn {
+      height: 46px;
+      border-radius: 18px;
+      padding: 0 16px;
+      font-weight: 950;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .22s ease
+    }
+
+    .btn:active,
+    .chip:active,
+    .icon-btn:active {
+      transform: scale(.97)
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, .24)
+    }
+
+    .btn-yellow {
+      background: var(--yellow);
+      color: var(--blue-dark)
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff
+    }
+
+    .btn-ghost {
+      background: #fff;
+      color: var(--blue-dark);
+      border: 1px solid var(--line)
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blue);
+      border: 1.5px solid var(--blue)
+    }
+
+    .search-box {
+      height: 50px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 15px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 12px
+    }
+
+    .search-box svg {
+      width: 18px;
+      color: var(--blue)
+    }
+
+    .search-input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      outline: 0;
+      color: var(--text);
+      font-size: 14px
+    }
+
+    .search-input::placeholder {
+      color: #A0A8BA
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 12px;
+      scrollbar-width: none
+    }
+
+    .chips::-webkit-scrollbar {
+      display: none
+    }
+
+    .chip {
+      height: 36px;
+      border-radius: 999px;
+      padding: 0 14px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid var(--line);
+      white-space: nowrap;
+      transition: .2s ease
+    }
+
+    .chip.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, .18)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow-soft);
+      transition: .22s ease
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow)
+    }
+
+    .appliance-card {
+      min-height: 170px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between
+    }
+
+    .appliance-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .appliance-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 18px;
+      background: var(--blue-soft);
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      font-size: 24px
+    }
+
+    .appliance-card:nth-child(3n) .appliance-icon {
+      background: var(--green-soft);
+      color: var(--green)
+    }
+
+    .appliance-card:nth-child(4n) .appliance-icon {
+      background: #FFF8DF;
+      color: #BD8500
+    }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: 950;
+      line-height: 1.08;
+      margin-top: 12px
+    }
+
+    .card-power {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue);
+      margin-top: 5px
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green-soft);
+      color: #149B73;
+      font-size: 10px;
+      font-weight: 950;
+      padding: 6px 9px;
+      border-radius: 999px;
+      margin-top: 10px
+    }
+
+    .price {
+      font-size: 10px;
+      line-height: 1.3;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 8px
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: var(--blue);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 10px 18px rgba(37, 99, 235, .18);
+      transition: .2s ease
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin: 18px 0 10px
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 950;
+      color: var(--text)
+    }
+
+    .small-sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 3px
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .metric {
+      padding: 15px
+    }
+
+    .metric-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 950;
+      color: var(--muted);
+      letter-spacing: .5px
+    }
+
+    .metric-value {
+      font-size: 20px;
+      font-weight: 950;
+      color: var(--blue-dark);
+      margin-top: 7px;
+      line-height: 1.1
+    }
+
+    .metric-note {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 8px;
+      line-height: 1.35
+    }
+
+    .metric.main {
+      grid-column: 1/-1;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color: #fff
+    }
+
+    .metric.main .metric-label,
+    .metric.main .metric-note {
+      color: rgba(255, 255, 255, .82)
+    }
+
+    .metric.main .metric-value {
+      color: #fff;
+      font-size: 28px
+    }
+
+    .pill {
+      display: inline-flex;
+      background: #FFF4C7;
+      color: #866000;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 9px;
+      font-weight: 950;
+      margin-top: 9px
+    }
+
+    .custom-card {
+      padding: 16px;
+      margin-bottom: 14px;
+      background: linear-gradient(180deg, #fff, #fbfdff)
+    }
+
+    .custom-head {
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      margin-bottom: 13px
+    }
+
+    .custom-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 22px
+    }
+
+    .custom-title {
+      font-weight: 950;
+      color: var(--text);
+      font-size: 15px
+    }
+
+    .custom-sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.4;
+      margin-top: 2px
+    }
+
+    .custom-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr .8fr;
+      gap: 8px;
+      margin-bottom: 10px
+    }
+
+    .field label {
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--muted);
+      font-weight: 950;
+      margin: 0 0 6px 4px
+    }
+
+    .field input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 0 11px;
+      color: var(--text);
+      outline: 0;
+      font-size: 12px;
+      font-weight: 850
+    }
+
+    .field input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, .10)
+    }
+
+    .list-card {
+      padding: 6px;
+      margin-top: 12px
+    }
+
+    .list-empty {
+      text-align: center;
+      padding: 22px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5
+    }
+
+    .list-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .list-row:last-child {
+      border-bottom: 0
+    }
+
+    .list-name {
+      font-size: 14px;
+      font-weight: 950
+    }
+
+    .list-meta {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.4;
+      margin-top: 4px
+    }
+
+    .list-energy {
+      font-size: 12px;
+      font-weight: 950;
+      color: var(--blue);
+      text-align: right;
+      white-space: nowrap
+    }
+
+    .remove-btn {
+      margin-top: 8px;
+      background: #FFF1F1;
+      color: #D03939;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 950
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px
+    }
+
+    .action-row .btn {
+      flex: 1
+    }
+
+    .table-card {
+      overflow: hidden
+    }
+
+    .table-head {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 14px 6px;
+      font-size: 11px;
+      font-weight: 950;
+      color: var(--muted);
+      text-transform: uppercase
+    }
+
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line)
+    }
+
+    .table-name {
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.3
+    }
+
+    .table-energy {
+      font-size: 12px;
+      font-weight: 950;
+      color: var(--blue);
+      white-space: nowrap
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 14px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font-weight: 950
+    }
+
+    .rec-card {
+      padding: 16px;
+      margin-bottom: 12px
+    }
+
+    .rec-hero {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+      color: #fff;
+      position: relative;
+      overflow: hidden
+    }
+
+    .rec-hero:before {
+      content: "";
+      position: absolute;
+      width: 145px;
+      height: 145px;
+      border-radius: 50%;
+      background: rgba(32, 201, 151, .26);
+      right: -45px;
+      top: -42px
+    }
+
+    .rec-hero>* {
+      position: relative
+    }
+
+    .rec-title {
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1.2;
+      color: var(--yellow)
+    }
+
+    .rec-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .84);
+      line-height: 1.45;
+      margin-top: 8px
+    }
+
+    .recommend-card {
+      display: grid;
+      grid-template-columns: 1fr 86px;
+      gap: 12px;
+      padding: 15px;
+      margin-bottom: 12px
+    }
+
+    .recommend-name {
+      font-size: 11px;
+      font-weight: 950;
+      color: var(--muted);
+      text-transform: uppercase
+    }
+
+    .recommend-value {
+      font-size: 20px;
+      color: var(--blue-dark);
+      font-weight: 950;
+      margin: 6px 0
+    }
+
+    .recommend-sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.35
+    }
+
+    .tip-box {
+      border-radius: 20px;
+      background: var(--green-soft);
+      color: #0C8D68;
+      padding: 10px
+    }
+
+    .tip-title {
+      font-size: 11px;
+      font-weight: 950;
+      margin-bottom: 5px
+    }
+
+    .tip-text {
+      font-size: 10px;
+      line-height: 1.35;
+      font-weight: 750
+    }
+
+    .formula-card {
+      padding: 16px;
+      margin-top: 12px
+    }
+
+    .formula-title {
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 950;
+      margin-bottom: 10px
+    }
+
+    .formula-item {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted);
+      font-weight: 750;
+      margin-bottom: 10px
+    }
+
+    .formula-item strong {
+      display: block;
+      color: var(--text);
+      font-size: 11px;
+      margin-bottom: 2px
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: clamp(10px, 4vw, 34px);
+      right: clamp(10px, 4vw, 34px);
+      bottom: 12px;
+      height: 72px;
+      max-width: 720px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, .88);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(231, 236, 245, .9);
+      border-radius: 28px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 50;
+      box-shadow: 0 18px 40px rgba(23, 32, 51, .16)
+    }
+
+    .nav-item {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .22s ease
+    }
+
+    .nav-item .icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: inherit
+    }
+
+    .nav-item.active {
+      color: var(--blue)
+    }
+
+    .nav-item.active .icon {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, .20);
+      transform: translateY(-2px)
+    }
+
+    .auth-bg {
+      background: linear-gradient(145deg, #ffffff 0%, #ffffff 58%, #E8FFF6 100%)
+    }
+
+    .auth-card {
+      width: 100%;
+      padding: 18px 10px
+    }
+
+    .auth-title {
+      text-align: center;
+      font-size: 23px;
+      font-weight: 950;
+      margin: 18px 0 24px;
+      color: #262B35
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 12px
+    }
+
+    .auth-input {
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 16px;
+      box-shadow: 0 8px 18px rgba(23, 32, 51, .04)
+    }
+
+    .auth-input svg {
+      width: 16px;
+      color: #A1AABD
+    }
+
+    .auth-input input {
+      border: 0;
+      outline: 0;
+      flex: 1;
+      font-size: 12px;
+      color: var(--text);
+      background: transparent
+    }
+
+    .auth-input input::placeholder {
+      color: #9AA4B7
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: flex-end;
+      margin: 2px 4px 4px
+    }
+
+    .auth-links span {
+      font-size: 10px;
+      font-weight: 850;
+      color: var(--blue);
+      cursor: pointer
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 16px 0;
+      color: #A4ACBA;
+      font-size: 11px;
+      font-weight: 900
+    }
+
+    .or:before,
+    .or:after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+      flex: 1
+    }
+
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px
+    }
+
+    .social {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-weight: 950;
+      box-shadow: var(--shadow-soft)
+    }
+
+    .social.x {
+      background: #111;
+      color: #fff
+    }
+
+    .social.f {
+      color: #1877F2
+    }
+
+    .social.g {
+      color: #EA4335
+    }
+
+    .auth-switch {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 18px
+    }
+
+    .auth-switch span {
+      color: var(--blue);
+      font-weight: 950;
+      cursor: pointer
+    }
+
+    .terms {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 9px;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.35
+    }
+
+    .terms input {
+      margin-top: 1px
+    }
+
+    .back-small {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: #333
+    }
+
+    .profile-hero {
+      padding: 18px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color: #fff;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px
+    }
+
+    .profile-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .22);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 950;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, .45)
+    }
+
+    .profile-avatar img,
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .avatar {
+      overflow: hidden
+    }
+
+    .profile-name {
+      font-size: 22px;
+      font-weight: 950
+    }
+
+    .profile-email {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .84);
+      font-weight: 800;
+      margin-top: 4px
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px
+    }
+
+    .pstat {
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 18px;
+      padding: 10px;
+      text-align: center
+    }
+
+    .pstat strong {
+      display: block;
+      font-size: 15px
+    }
+
+    .pstat span {
+      font-size: 9px;
+      text-transform: uppercase;
+      font-weight: 950;
+      color: rgba(255, 255, 255, .78)
+    }
+
+    .profile-card {
+      padding: 16px;
+      margin-bottom: 12px
+    }
+
+    .database-box {
+      background: #0F172A;
+      color: #DCE7FF;
+      border-radius: 22px;
+      padding: 12px;
+      font-family: Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.45;
+      overflow: auto;
+      max-height: 160px;
+      margin-top: 10px
+    }
+
+    .profile-form {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, .24);
+      z-index: 70;
+      opacity: 0;
+      pointer-events: none;
+      transition: .28s ease;
+      backdrop-filter: blur(6px)
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      border-radius: 32px 32px 0 0;
+      padding: 22px 20px 30px;
+      transform: translateY(110%);
+      transition: .34s cubic-bezier(.2, .8, .2, 1);
+      box-shadow: 0 -22px 55px rgba(23, 32, 51, .22)
+    }
+
+    .overlay.show .sheet {
+      transform: translateY(0)
+    }
+
+    .sheet-handle {
+      width: 46px;
+      height: 5px;
+      border-radius: 999px;
+      background: #DEE5F0;
+      margin: 0 auto 18px
+    }
+
+    .selected-name {
+      font-size: 22px;
+      font-weight: 950;
+      text-align: center
+    }
+
+    .selected-power {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 850;
+      margin-top: 5px
+    }
+
+    .hour-box {
+      height: 86px;
+      border-radius: 26px;
+      background: var(--blue-soft);
+      display: grid;
+      place-items: center;
+      margin: 18px 0
+    }
+
+    .hour-display {
+      font-size: 34px;
+      font-weight: 950;
+      color: var(--blue)
+    }
+
+    .hour-controls {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 18px
+    }
+
+    .hour-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 20px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 950
+    }
+
+    .close-x {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      background: #F3F6FB;
+      color: var(--text);
+      font-size: 18px
+    }
+
+    .toast-wrap {
+      position: absolute;
+      top: 54px;
+      left: 16px;
+      right: 16px;
+      z-index: 100;
+      display: grid;
+      gap: 8px;
+      pointer-events: none
+    }
+
+    .toast {
+      display: flex;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--green);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+      animation: toastIn .25s ease both
+    }
+
+    .toast.error {
+      border-left-color: #EF4444
+    }
+
+    .toast-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      background: var(--green-soft);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      flex: 0 0 30px
+    }
+
+    .toast.error .toast-icon {
+      background: #FFF1F1;
+      color: #EF4444
+    }
+
+    .toast-title {
+      font-size: 12px;
+      font-weight: 950
+    }
+
+    .toast-message {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 750;
+      line-height: 1.35;
+      margin-top: 2px
+    }
+
+    .toast.hide {
+      animation: toastOut .22s ease both
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px) scale(.98)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateY(-8px) scale(.98)
+      }
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px
+    }
+
+    .admin-card {
+      padding: 16px
+    }
+
+    .admin-value {
+      font-size: 25px;
+      font-weight: 950;
+      color: var(--blue-dark);
+      margin-top: 6px
+    }
+
+    .admin-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 950;
+      letter-spacing: .5px
+    }
+
+    .user-card {
+      padding: 14px;
+      margin-bottom: 10px
+    }
+
+    .user-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 950;
+      color: var(--text)
+    }
+
+    .user-email {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 3px
+    }
+
+    .user-pill {
+      font-size: 9px;
+      font-weight: 950;
+      border-radius: 999px;
+      padding: 5px 8px;
+      background: var(--blue-soft);
+      color: var(--blue)
+    }
+
+    .admin-loads {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted);
+      font-weight: 800
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px
+    }
+
+    .admin-actions .btn {
+      flex: 1
+    }
+
+    .owner-only {
+      display: none
+    }
+
+    .photo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px
+    }
+
+    .photo-preview {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      background: var(--blue-soft);
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      font-weight: 950;
+      overflow: hidden;
+      border: 1px solid var(--line)
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .file-btn {
+      position: relative;
+      overflow: hidden
+    }
+
+    .file-btn input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .home-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 210px;
+      align-items: center;
+      gap: 18px;
+      padding: 24px;
+      background: linear-gradient(135deg, #0F1E63 0%, #2563EB 58%, #20C997 100%)
+    }
+
+    .home-hero h1 {
+      font-size: 30px;
+      max-width: 360px
+    }
+
+    .home-hero p {
+      max-width: 360px;
+      font-size: 13px
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2
+    }
+
+    .hero-visual {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, .18);
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 28px;
+      padding: 8px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .16);
+      backdrop-filter: blur(10px)
+    }
+
+    .hero-visual img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 22px;
+      object-fit: cover
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .22);
+      color: #fff;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 10px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 10px
+    }
+
+    .assistant-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 12px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 14px
+    }
+
+    .assistant-strip img {
+      width: 74px;
+      height: 54px;
+      border-radius: 18px;
+      object-fit: cover
+    }
+
+    .assistant-strip strong {
+      display: block;
+      font-size: 14px;
+      color: var(--blue-dark);
+      line-height: 1.2
+    }
+
+    .assistant-strip span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 3px;
+      line-height: 1.35
+    }
+
+    .system-sketch {
+      padding: 16px;
+      margin: 12px 0;
+      background: linear-gradient(180deg, #fff, #fbfdff);
+      overflow: hidden
+    }
+
+    .sketch-wrap {
+      width: 100%;
+      overflow: auto;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #F8FBFF, #EFF7FF);
+      border: 1px solid var(--line);
+      padding: 10px
+    }
+
+    .solar-svg {
+      width: 100%;
+      min-width: 560px;
+      height: auto;
+      display: block
+    }
+
+    .sketch-node {
+      filter: drop-shadow(0 8px 14px rgba(37, 99, 235, .14))
+    }
+
+    .sketch-line {
+      stroke: #2563EB;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 8 8;
+      animation: dashFlow 1.25s linear infinite
+    }
+
+    .sketch-line.ac {
+      stroke: #20C997
+    }
+
+    .sketch-line.bat {
+      stroke: #F3C332
+    }
+
+    .sketch-load-dot {
+      animation: popIn .35s ease both
+    }
+
+    .sketch-note {
+      font-size: 11px;
+      fill: #7A8499;
+      font-weight: 800
+    }
+
+    .sketch-label {
+      font-size: 12px;
+      fill: #172033;
+      font-weight: 950
+    }
+
+    .sketch-value {
+      font-size: 10px;
+      fill: #2563EB;
+      font-weight: 900
+    }
+
+    .sketch-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font-size: 10px;
+      font-weight: 950;
+      padding: 6px 9px;
+      margin: 8px 6px 0 0
+    }
+
+    .formula-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .formula-grid .formula-item {
+      background: #F8FBFF;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 10px;
+      margin-bottom: 0
+    }
+
+    @keyframes dashFlow {
+      to {
+        stroke-dashoffset: -32
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(.7)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    @media(max-width:480px) {
+      .formula-grid {
+        grid-template-columns: 1fr
+      }
+
+      .sketch-wrap {
+        padding: 6px
+      }
+    }
+
+    @media(max-width:700px) {
+      .home-hero {
+        grid-template-columns: 1fr;
+        padding: 22px
+      }
+
+      .hero-visual {
+        max-width: 280px;
+        margin: auto
+      }
+
+      .home-hero h1 {
+        font-size: 27px
+      }
+    }
+
+    @media(max-width:480px) {
+      .content {
+        padding: 20px 16px 104px
+      }
+
+      .bottom-nav {
+        left: 10px;
+        right: 10px;
+        bottom: 10px
+      }
+
+      .grid {
+        gap: 10px
+      }
+
+      .recommend-card {
+        grid-template-columns: 1fr
+      }
+
+      .custom-grid {
+        grid-template-columns: 1fr
+      }
+
+      .hero h1 {
+        font-size: 26px
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="phone">
-    <div class="status"><span>10:45</span><span>●●●  WiFi  ▰</span></div>
+    <div class="status"><span>10:45</span><span>●●● WiFi ▰</span></div>
     <div class="toast-wrap" id="toastWrap"></div>
 
     <section class="app-page active auth-bg" id="loginPage">
@@ -70,14 +1697,20 @@
           <div class="auth-title" id="authTitle">Sign In</div>
           <div class="auth-form">
             <div class="auth-input"><span>✉</span><input id="authEmail" type="email" placeholder="Phone/Email Id"></div>
-            <div class="auth-input hidden" id="nameWrap"><span>☻</span><input id="authName" type="text" placeholder="Full Name"></div>
-            <div class="auth-input"><span>🔒</span><input id="authPassword" type="password" placeholder="Password"><span id="togglePass" style="cursor:pointer;color:#9AA4B7">◉</span></div>
-            <label class="terms hidden" id="termsWrap"><input type="checkbox" id="termsCheck"> <span>I have read and agree to User Agreement and Privacy Policy</span></label>
+            <div class="auth-input hidden" id="nameWrap"><span>☻</span><input id="authName" type="text"
+                placeholder="Full Name"></div>
+            <div class="auth-input"><span>🔒</span><input id="authPassword" type="password" placeholder="Password"><span
+                id="togglePass" style="cursor:pointer;color:#9AA4B7">◉</span></div>
+            <label class="terms hidden" id="termsWrap"><input type="checkbox" id="termsCheck"> <span>I have read and
+                agree to User Agreement and Privacy Policy</span></label>
             <div class="auth-links"><span id="forgotPass">Forgotten Password?</span></div>
             <button class="btn btn-primary" id="authSubmit">Sign In</button>
           </div>
           <div class="or">OR</div>
-          <div class="social-row"><button class="social x" data-social="Twitter" title="Continue with Twitter">𝕏</button><button class="social f" data-social="Facebook" title="Continue with Facebook">f</button><button class="social g" data-social="Google" title="Continue with Google">G</button></div>
+          <div class="social-row"><button class="social x" data-social="Twitter"
+              title="Continue with Twitter">𝕏</button><button class="social f" data-social="Facebook"
+              title="Continue with Facebook">f</button><button class="social g" data-social="Google"
+              title="Continue with Google">G</button></div>
           <div class="auth-switch" id="authSwitchText">New to Solar Home? <span id="authSwitch">Register</span></div>
         </div>
       </div>
@@ -86,211 +1719,467 @@
     <section class="app-page" id="homePage">
       <div class="content">
         <div class="top-row">
-          <div class="brand-mini"><div class="brand-icon">☀</div><div><div class="eyebrow">Smart sizing</div><div class="title">Solar Home</div></div></div>
+          <div class="brand-mini">
+            <div class="brand-icon">☀</div>
+            <div>
+              <div class="eyebrow">Smart sizing</div>
+              <div class="title">Solar Home</div>
+            </div>
+          </div>
           <div class="avatar" id="homeAvatar">S</div>
         </div>
         <div class="hero home-hero">
           <div class="hero-copy">
             <div class="hero-badge">⚙ Engineering powered</div>
             <h1>Size your solar system beautifully.</h1>
-            <p>Add appliances, usage hours and ratings. Solar Home calculates energy, panels, batteries and inverter size for a cleaner recommendation.</p>
-            <div class="hero-actions"><button class="btn btn-yellow" id="heroStartBtn">Add Load</button><button class="btn btn-ghost" id="heroCalcBtn">View Calculator</button></div>
+            <p>Add appliances, usage hours and ratings. Solar Home calculates energy, panels, batteries and inverter
+              size for a cleaner recommendation.</p>
+            <div class="hero-actions"><button class="btn btn-yellow" id="heroStartBtn">Add Load</button><button
+                class="btn btn-ghost" id="heroCalcBtn">View Calculator</button></div>
           </div>
-          <div class="hero-visual"><img src="assets/solar-engineer-assistant.png" alt="Solar Home engineering assistant"></div>
+          <div class="hero-visual"><img src="solar-engineer-assistant.png" alt="Solar Home engineering assistant"></div>
         </div>
         <div class="assistant-strip">
-          <img src="assets/solar-engineer-assistant.png" alt="Engineering assistant preview">
-          <div><strong>Your smart solar assistant</strong><span>Pick loads, enter hours, then get a clean system recommendation.</span></div>
+          <img src="solar-engineer-assistant.png" alt="Engineering assistant preview">
+          <div><strong>Your smart solar assistant</strong><span>Pick loads, enter hours, then get a clean system
+              recommendation.</span></div>
         </div>
-        <div class="search-box"><span>⌕</span><input class="search-input" id="searchInput" placeholder="Search appliance..."></div>
+        <div class="search-box"><span>⌕</span><input class="search-input" id="searchInput"
+            placeholder="Search appliance..."></div>
         <div class="chips" id="chips">
-          <button class="chip active" data-category="all">All</button><button class="chip" data-category="Lighting">Lighting</button><button class="chip" data-category="Entertainment">Entertainment</button><button class="chip" data-category="Refrigeration">Refrigeration</button><button class="chip" data-category="House Hold">House Hold</button><button class="chip" data-category="Kitchen">Kitchen</button><button class="chip" data-category="Cooling">Cooling</button><button class="chip" data-category="Office">Office</button>
+          <button class="chip active" data-category="all">All</button><button class="chip"
+            data-category="Lighting">Lighting</button><button class="chip"
+            data-category="Entertainment">Entertainment</button><button class="chip"
+            data-category="Refrigeration">Refrigeration</button><button class="chip" data-category="House Hold">House
+            Hold</button><button class="chip" data-category="Kitchen">Kitchen</button><button class="chip"
+            data-category="Cooling">Cooling</button><button class="chip" data-category="Office">Office</button>
         </div>
         <div class="card custom-card" id="customCard">
-          <div class="custom-head"><div class="custom-badge">＋</div><div><div class="custom-title">Custom appliance</div><div class="custom-sub">Use this for any appliance missing from the list.</div></div></div>
+          <div class="custom-head">
+            <div class="custom-badge">＋</div>
+            <div>
+              <div class="custom-title">Custom appliance</div>
+              <div class="custom-sub">Use this for any appliance missing from the list.</div>
+            </div>
+          </div>
           <div class="custom-grid">
             <div class="field"><label>Appliance</label><input id="customName" placeholder="Water pump"></div>
-            <div class="field"><label>Rating W</label><input id="customPower" type="number" min="1" placeholder="750"></div>
-            <div class="field"><label>Hours</label><input id="customHours" type="number" min="0.1" max="24" step="0.1" placeholder="2"></div>
+            <div class="field"><label>Rating W</label><input id="customPower" type="number" min="1" placeholder="750">
+            </div>
+            <div class="field"><label>Hours</label><input id="customHours" type="number" min="0.1" max="24" step="0.1"
+                placeholder="2"></div>
           </div>
           <button class="btn btn-green" style="width:100%" id="addCustomBtn">Add custom appliance</button>
         </div>
-        <div class="section-head"><div><div class="section-title">Appliance library</div><div class="small-sub">Tap plus to add daily usage.</div></div></div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">Appliance library</div>
+            <div class="small-sub">Tap plus to add daily usage.</div>
+          </div>
+        </div>
         <div class="grid" id="applianceGrid"></div>
       </div>
     </section>
 
     <section class="app-page" id="calcPage">
       <div class="content">
-        <div class="top-row"><div><div class="eyebrow">Calculator</div><div class="title">Loads & Results</div></div><button class="btn btn-primary" id="goHomeAddBtn">＋ Add</button></div>
-        <div class="metric-grid">
-          <div class="card metric main"><div class="metric-label">Total daily energy</div><div class="metric-value" id="totalEnergyWhText">0 Wh/day</div><div class="metric-note" id="totalEnergyKwhText">0.000 kWh per day</div></div>
-          <div class="card metric"><div class="metric-label">Panels</div><div class="metric-value" id="panelPowerText">0 Wp</div><div class="metric-note">5.5 peak sun hours + losses</div></div>
-          <div class="card metric"><div class="metric-label">Battery</div><div class="metric-value" id="batteryText">0 kWh</div><div class="metric-note">1 day autonomy, 80% DOD</div></div>
-          <div class="card metric"><div class="metric-label">Inverter</div><div class="metric-value" id="inverterText">0 kVA</div><div class="metric-note">20% safety margin</div></div>
-          <div class="card metric"><div class="metric-label">Current</div><div class="metric-value" id="currentText">0 A</div><div class="metric-note">Estimated at 24V system</div></div>
-          <div class="card metric"><div class="metric-label">Controller</div><div class="metric-value" id="controllerText">0 A</div><div class="metric-note">MPPT/PWM with 25% safety factor</div></div>
-          <div class="card metric"><div class="metric-label">Battery Ah</div><div class="metric-value" id="batteryAhText">0 Ah</div><div class="metric-note">Based on 24V battery bank</div></div>
-          <div class="card metric"><div class="metric-label">PV Cable</div><div class="metric-value" id="pvCableText">0 mm²</div><div class="metric-note">PV array to charge controller</div></div>
-          <div class="card metric"><div class="metric-label">Battery Cable</div><div class="metric-value" id="batteryCableText">0 mm²</div><div class="metric-note">Battery bank to inverter</div></div>
+        <div class="top-row">
+          <div>
+            <div class="eyebrow">Calculator</div>
+            <div class="title">Loads & Results</div>
+          </div><button class="btn btn-primary" id="goHomeAddBtn">＋ Add</button>
         </div>
-        <div class="section-head"><div><div class="section-title">My appliances</div><div class="small-sub"><span id="applianceCountText">0</span> selected appliances.</div></div></div>
+        <div class="metric-grid">
+          <div class="card metric main">
+            <div class="metric-label">Total daily energy</div>
+            <div class="metric-value" id="totalEnergyWhText">0 Wh/day</div>
+            <div class="metric-note" id="totalEnergyKwhText">0.000 kWh per day</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Panels</div>
+            <div class="metric-value" id="panelPowerText">0 Wp</div>
+            <div class="metric-note">5.5 peak sun hours + losses</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Battery</div>
+            <div class="metric-value" id="batteryText">0 kWh</div>
+            <div class="metric-note">1 day autonomy, 80% DOD</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Inverter</div>
+            <div class="metric-value" id="inverterText">0 kVA</div>
+            <div class="metric-note">20% safety margin</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Current</div>
+            <div class="metric-value" id="currentText">0 A</div>
+            <div class="metric-note">Estimated at 24V system</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Controller</div>
+            <div class="metric-value" id="controllerText">0 A</div>
+            <div class="metric-note">MPPT/PWM with 25% safety factor</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Battery Ah</div>
+            <div class="metric-value" id="batteryAhText">0 Ah</div>
+            <div class="metric-note">Based on 24V battery bank</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">PV Cable</div>
+            <div class="metric-value" id="pvCableText">0 mm²</div>
+            <div class="metric-note">PV array to charge controller</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">Battery Cable</div>
+            <div class="metric-value" id="batteryCableText">0 mm²</div>
+            <div class="metric-note">Battery bank to inverter</div>
+          </div>
+        </div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">My appliances</div>
+            <div class="small-sub"><span id="applianceCountText">0</span> selected appliances.</div>
+          </div>
+        </div>
         <div class="card list-card" id="myListCard"></div>
-        <div class="action-row"><button class="btn btn-outline" id="clearListBtn">Clear</button><button class="btn btn-primary" id="viewRecommendationsBtn">Recommend</button></div>
-        <div class="section-head"><div><div class="section-title">Energy table</div><div class="small-sub">Breakdown of daily consumption.</div></div></div>
-        <div class="card table-card"><div class="table-head"><span>Appliance</span><span>Energy</span></div><div id="selectedTable"></div><div class="total-row"><span>Total</span><span id="totalTableWhText">0 Wh/day</span></div></div>
-        <div class="section-head"><div><div class="section-title">Live system sketch</div><div class="small-sub">The drawing updates itself as you add or remove appliances.</div></div></div>
-        <div class="card system-sketch"><div id="liveSketchCalc" class="sketch-wrap"></div></div>
+        <div class="action-row"><button class="btn btn-outline" id="clearListBtn">Clear</button><button
+            class="btn btn-primary" id="viewRecommendationsBtn">Recommend</button></div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">Energy table</div>
+            <div class="small-sub">Breakdown of daily consumption.</div>
+          </div>
+        </div>
+        <div class="card table-card">
+          <div class="table-head"><span>Appliance</span><span>Energy</span></div>
+          <div id="selectedTable"></div>
+          <div class="total-row"><span>Total</span><span id="totalTableWhText">0 Wh/day</span></div>
+        </div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">Live system sketch</div>
+            <div class="small-sub">The drawing updates itself as you add or remove appliances.</div>
+          </div>
+        </div>
+        <div class="card system-sketch">
+          <div id="liveSketchCalc" class="sketch-wrap"></div>
+        </div>
       </div>
     </section>
 
     <section class="app-page" id="recommendPage">
       <div class="content">
-        <div class="top-row"><div><div class="eyebrow">Recommendation</div><div class="title">System Plan</div></div></div>
-        <div class="card rec-card rec-hero"><div class="recommend-name" style="color:rgba(255,255,255,.75)">Smart recommendation</div><div class="rec-title" id="smartRecommendationText">Add Appliances To Get A Smart Recommendation</div><div class="rec-text">The app adds losses and safety margins to produce practical solar sizing.</div></div>
-        <div class="card recommend-card"><div><div class="recommend-name">Solar Panels</div><div class="recommend-value" id="recommendPanelText">0 Wp</div><div class="recommend-sub" id="recommendPanelSub">Example: 1 × 0W panel</div></div><div class="tip-box"><div class="tip-title">Tip</div><div class="tip-text">Face panels to strong sunlight and avoid shade.</div></div></div>
-        <div class="card recommend-card"><div><div class="recommend-name">Battery Bank</div><div class="recommend-value" id="recommendBatteryText">0 kWh</div><div class="recommend-sub" id="recommendBatterySub">Example recommendation</div></div><div class="tip-box"><div class="tip-title">Tip</div><div class="tip-text">Lithium lasts longer; lead-acid is cheaper.</div></div></div>
-        <div class="card recommend-card"><div><div class="recommend-name">Inverter</div><div class="recommend-value" id="recommendInverterText">0 kVA</div><div class="recommend-sub" id="recommendInverterSub">Pure sine wave inverter recommended.</div></div><div class="tip-box"><div class="tip-title">Tip</div><div class="tip-text">Keep inverter above running load.</div></div></div>
-        <div class="card recommend-card"><div><div class="recommend-name">Charge Controller</div><div class="recommend-value" id="recommendControllerText">0 A</div><div class="recommend-sub" id="recommendControllerSub">MPPT controller with safety margin.</div></div><div class="tip-box"><div class="tip-title">Tip</div><div class="tip-text">MPPT is better when panel voltage is higher than battery voltage.</div></div></div>
-        <div class="card recommend-card"><div><div class="recommend-name">Cables</div><div class="recommend-value" id="recommendCableText">0 mm²</div><div class="recommend-sub" id="recommendCableSub">Estimated copper cable sizes using 4% voltage drop.</div></div><div class="tip-box"><div class="tip-title">Tip</div><div class="tip-text">Use proper protection: fuse, breaker, earthing and isolator.</div></div></div>
-        <div class="section-head"><div><div class="section-title">Final connection sketch</div><div class="small-sub">Flexible solar flow: panels → controller → battery → inverter → loads.</div></div></div>
-        <div class="card system-sketch"><div id="liveSketchFinal" class="sketch-wrap"></div></div>
-        <div class="action-row"><button class="btn btn-outline" id="shareResultsBtn">Share</button><button class="btn btn-primary" id="saveRecommendationBtn">Save PDF</button></div>
-        <div class="card formula-card"><div class="formula-title">Formulas used</div><div class="formula-grid"><div class="formula-item"><strong>Appliance Energy</strong>Energy = Power (W) × Hours/day</div><div class="formula-item"><strong>PV Array</strong>PV Wp = Daily Wh ÷ Peak Sun Hours ÷ System efficiency</div><div class="formula-item"><strong>Battery Ah</strong>Ah = Daily Wh × Autonomy ÷ System V ÷ DOD</div><div class="formula-item"><strong>Inverter</strong>Watts = Running load × 1.25; kVA = W ÷ Power factor ÷ 1000</div><div class="formula-item"><strong>Controller</strong>Current ≈ Array current × 1.25 safety factor</div><div class="formula-item"><strong>Cable Area</strong>A = ρ × L × I × 2 ÷ Vdrop, then converted to mm²</div></div></div>
+        <div class="top-row">
+          <div>
+            <div class="eyebrow">Recommendation</div>
+            <div class="title">System Plan</div>
+          </div>
+        </div>
+        <div class="card rec-card rec-hero">
+          <div class="recommend-name" style="color:rgba(255,255,255,.75)">Smart recommendation</div>
+          <div class="rec-title" id="smartRecommendationText">Add Appliances To Get A Smart Recommendation</div>
+          <div class="rec-text">The app adds losses and safety margins to produce practical solar sizing.</div>
+        </div>
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Solar Panels</div>
+            <div class="recommend-value" id="recommendPanelText">0 Wp</div>
+            <div class="recommend-sub" id="recommendPanelSub">Example: 1 × 0W panel</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Face panels to strong sunlight and avoid shade.</div>
+          </div>
+        </div>
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Battery Bank</div>
+            <div class="recommend-value" id="recommendBatteryText">0 kWh</div>
+            <div class="recommend-sub" id="recommendBatterySub">Example recommendation</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Lithium lasts longer; lead-acid is cheaper.</div>
+          </div>
+        </div>
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Inverter</div>
+            <div class="recommend-value" id="recommendInverterText">0 kVA</div>
+            <div class="recommend-sub" id="recommendInverterSub">Pure sine wave inverter recommended.</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Keep inverter above running load.</div>
+          </div>
+        </div>
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Charge Controller</div>
+            <div class="recommend-value" id="recommendControllerText">0 A</div>
+            <div class="recommend-sub" id="recommendControllerSub">MPPT controller with safety margin.</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">MPPT is better when panel voltage is higher than battery voltage.</div>
+          </div>
+        </div>
+        <div class="card recommend-card">
+          <div>
+            <div class="recommend-name">Cables</div>
+            <div class="recommend-value" id="recommendCableText">0 mm²</div>
+            <div class="recommend-sub" id="recommendCableSub">Estimated copper cable sizes using 4% voltage drop.</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">Tip</div>
+            <div class="tip-text">Use proper protection: fuse, breaker, earthing and isolator.</div>
+          </div>
+        </div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">Final connection sketch</div>
+            <div class="small-sub">Flexible solar flow: panels → controller → battery → inverter → loads.</div>
+          </div>
+        </div>
+        <div class="card system-sketch">
+          <div id="liveSketchFinal" class="sketch-wrap"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-outline" id="shareResultsBtn">Share</button><button
+            class="btn btn-primary" id="saveRecommendationBtn">Save PDF</button></div>
+        <div class="card formula-card">
+          <div class="formula-title">Formulas used</div>
+          <div class="formula-grid">
+            <div class="formula-item"><strong>Appliance Energy</strong>Energy = Power (W) × Hours/day</div>
+            <div class="formula-item"><strong>PV Array</strong>PV Wp = Daily Wh ÷ Peak Sun Hours ÷ System efficiency
+            </div>
+            <div class="formula-item"><strong>Battery Ah</strong>Ah = Daily Wh × Autonomy ÷ System V ÷ DOD</div>
+            <div class="formula-item"><strong>Inverter</strong>Watts = Running load × 1.25; kVA = W ÷ Power factor ÷
+              1000</div>
+            <div class="formula-item"><strong>Controller</strong>Current ≈ Array current × 1.25 safety factor</div>
+            <div class="formula-item"><strong>Cable Area</strong>A = ρ × L × I × 2 ÷ Vdrop, then converted to mm²</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="app-page" id="profilePage">
       <div class="content">
-        <div class="profile-hero"><div class="profile-avatar" id="profileAvatar">S</div><div class="profile-name" id="profileName">Solar User</div><div class="profile-email" id="profileEmail">user@email.com</div><div class="profile-stats"><div class="pstat"><strong id="profileLoads">0</strong><span>Loads</span></div><div class="pstat"><strong id="profileEnergy">0</strong><span>Wh/day</span></div><div class="pstat"><strong id="profilePanels">0</strong><span>Wp</span></div></div></div>
-        <div class="card profile-card"><div class="section-title">Edit profile</div><div class="profile-form"><div class="field"><label>Full name</label><input id="profileNameInput" placeholder="Your name"></div><div class="field"><label>Email</label><input id="profileEmailInput" placeholder="Email"></div><div class="photo-row"><div class="photo-preview" id="photoPreview">S</div><label class="btn btn-ghost file-btn" style="flex:1">Choose profile picture<input id="profilePhotoInput" type="file" accept="image/*"></label></div><button class="btn btn-primary" id="saveProfileBtn">Save profile</button></div></div>
-        <div class="card profile-card owner-only" id="databaseOwnerCard"><div class="section-title">Free JSON database</div><div class="small-sub">This app uses a free local JSON database in the browser using localStorage. It stores users, sessions and solar projects without paid hosting.</div><div class="action-row"><button class="btn btn-outline" id="exportDbBtn">Export JSON</button><button class="btn btn-green" id="resetDbBtn">Reset DB</button></div><pre class="database-box" id="databasePreview"></pre></div>
-        <button class="btn btn-outline" style="width:100%;border-color:#EF4444;color:#EF4444" id="logoutBtn">Log out</button>
+        <div class="profile-hero">
+          <div class="profile-avatar" id="profileAvatar">S</div>
+          <div class="profile-name" id="profileName">Solar User</div>
+          <div class="profile-email" id="profileEmail">user@email.com</div>
+          <div class="profile-stats">
+            <div class="pstat"><strong id="profileLoads">0</strong><span>Loads</span></div>
+            <div class="pstat"><strong id="profileEnergy">0</strong><span>Wh/day</span></div>
+            <div class="pstat"><strong id="profilePanels">0</strong><span>Wp</span></div>
+          </div>
+        </div>
+        <div class="card profile-card">
+          <div class="section-title">Edit profile</div>
+          <div class="profile-form">
+            <div class="field"><label>Full name</label><input id="profileNameInput" placeholder="Your name"></div>
+            <div class="field"><label>Email</label><input id="profileEmailInput" placeholder="Email"></div>
+            <div class="photo-row">
+              <div class="photo-preview" id="photoPreview">S</div>
+              <label class="btn btn-ghost file-btn" style="flex:1">Choose profile picture<input id="profilePhotoInput"
+                  type="file" accept="image/*"></label>
+            </div><button class="btn btn-primary" id="saveProfileBtn">Save profile</button>
+          </div>
+        </div>
+        <div class="card profile-card owner-only" id="databaseOwnerCard">
+          <div class="section-title">Free JSON database</div>
+          <div class="small-sub">This app uses a free local JSON database in the browser using localStorage. It stores
+            users, sessions and solar projects without paid hosting.</div>
+          <div class="action-row"><button class="btn btn-outline" id="exportDbBtn">Export JSON</button><button
+              class="btn btn-green" id="resetDbBtn">Reset DB</button></div>
+          <pre class="database-box" id="databasePreview"></pre>
+        </div>
+        <button class="btn btn-outline" style="width:100%;border-color:#EF4444;color:#EF4444" id="logoutBtn">Log
+          out</button>
       </div>
     </section>
 
 
     <section class="app-page" id="adminPage">
       <div class="content">
-        <div class="top-row"><div><div class="eyebrow">Owner dashboard</div><div class="title">Admin Panel</div></div><button class="btn btn-outline" id="adminRefreshBtn">Refresh</button></div>
+        <div class="top-row">
+          <div>
+            <div class="eyebrow">Owner dashboard</div>
+            <div class="title">Admin Panel</div>
+          </div><button class="btn btn-outline" id="adminRefreshBtn">Refresh</button>
+        </div>
         <div class="hero">
           <h1>Owner view only.</h1>
-          <p>See registered users, their saved solar projects, total loads, and exported JSON data from this browser database.</p>
+          <p>See registered users, their saved solar projects, total loads, and exported JSON data from this browser
+            database.</p>
         </div>
         <div class="admin-grid">
-          <div class="card admin-card"><div class="admin-label">Total users</div><div class="admin-value" id="adminTotalUsers">0</div></div>
-          <div class="card admin-card"><div class="admin-label">Total projects</div><div class="admin-value" id="adminTotalProjects">0</div></div>
-          <div class="card admin-card"><div class="admin-label">Total loads</div><div class="admin-value" id="adminTotalLoads">0</div></div>
-          <div class="card admin-card"><div class="admin-label">Energy saved</div><div class="admin-value" id="adminTotalEnergy">0</div></div>
+          <div class="card admin-card">
+            <div class="admin-label">Total users</div>
+            <div class="admin-value" id="adminTotalUsers">0</div>
+          </div>
+          <div class="card admin-card">
+            <div class="admin-label">Total projects</div>
+            <div class="admin-value" id="adminTotalProjects">0</div>
+          </div>
+          <div class="card admin-card">
+            <div class="admin-label">Total loads</div>
+            <div class="admin-value" id="adminTotalLoads">0</div>
+          </div>
+          <div class="card admin-card">
+            <div class="admin-label">Energy saved</div>
+            <div class="admin-value" id="adminTotalEnergy">0</div>
+          </div>
         </div>
-        <div class="section-head"><div><div class="section-title">Registered users</div><div class="small-sub">Normal users cannot see this page or the owner database view.</div></div></div>
+        <div class="section-head">
+          <div>
+            <div class="section-title">Registered users</div>
+            <div class="small-sub">Normal users cannot see this page or the owner database view.</div>
+          </div>
+        </div>
         <div id="adminUsersList"></div>
         <div class="card profile-card">
           <div class="section-title">Owner JSON database</div>
           <div class="small-sub">This is the full local database view for the app owner only.</div>
-          <div class="admin-actions"><button class="btn btn-outline" id="adminExportBtn">Export JSON</button><button class="btn btn-green" id="adminClearSessionsBtn">Clear Session</button></div>
+          <div class="admin-actions"><button class="btn btn-outline" id="adminExportBtn">Export JSON</button><button
+              class="btn btn-green" id="adminClearSessionsBtn">Clear Session</button></div>
           <pre class="database-box" id="adminDatabasePreview"></pre>
         </div>
       </div>
     </section>
 
-    <div class="overlay" id="overlay"><div class="sheet"><button class="close-x" id="closeOverlayBtn">×</button><div class="sheet-handle"></div><div class="selected-name" id="selectedApplianceName">LED Bulb</div><div class="selected-power" id="selectedAppliancePower">3W-15W</div><div class="hour-box"><div class="hour-display" id="hourDisplay">6 hrs</div></div><div class="hour-controls"><button class="hour-btn" id="minusBtn">−</button><button class="hour-btn" id="plusBtn">+</button></div><button class="btn btn-primary" style="width:100%" id="addApplianceBtn">Add appliance</button></div></div>
+    <div class="overlay" id="overlay">
+      <div class="sheet"><button class="close-x" id="closeOverlayBtn">×</button>
+        <div class="sheet-handle"></div>
+        <div class="selected-name" id="selectedApplianceName">LED Bulb</div>
+        <div class="selected-power" id="selectedAppliancePower">3W-15W</div>
+        <div class="hour-box">
+          <div class="hour-display" id="hourDisplay">6 hrs</div>
+        </div>
+        <div class="hour-controls"><button class="hour-btn" id="minusBtn">−</button><button class="hour-btn"
+            id="plusBtn">+</button></div><button class="btn btn-primary" style="width:100%" id="addApplianceBtn">Add
+          appliance</button>
+      </div>
+    </div>
 
-    <div class="bottom-nav hidden" id="bottomNav"><div class="nav-item active" data-page="homePage"><div class="icon">⌂</div><div>Home</div></div><div class="nav-item" data-page="calcPage"><div class="icon">◈</div><div>Calc</div></div><div class="nav-item" data-page="recommendPage"><div class="icon">✦</div><div>Plan</div></div><div class="nav-item" data-page="profilePage"><div class="icon">☻</div><div>Profile</div></div><div class="nav-item owner-only" id="adminNavItem" data-page="adminPage"><div class="icon">⚙</div><div>Admin</div></div></div>
+    <div class="bottom-nav hidden" id="bottomNav">
+      <div class="nav-item active" data-page="homePage">
+        <div class="icon">⌂</div>
+        <div>Home</div>
+      </div>
+      <div class="nav-item" data-page="calcPage">
+        <div class="icon">◈</div>
+        <div>Calc</div>
+      </div>
+      <div class="nav-item" data-page="recommendPage">
+        <div class="icon">✦</div>
+        <div>Plan</div>
+      </div>
+      <div class="nav-item" data-page="profilePage">
+        <div class="icon">☻</div>
+        <div>Profile</div>
+      </div>
+      <div class="nav-item owner-only" id="adminNavItem" data-page="adminPage">
+        <div class="icon">⚙</div>
+        <div>Admin</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const ADMIN_EMAIL='admin@solarhome.app';
-    const ADMIN_PASSWORD='shaladmin123';
-    const defaultDB={users:[{id:'admin_owner',name:'Solar Home Admin',email:ADMIN_EMAIL,password:ADMIN_PASSWORD,role:'admin',photo:'',createdAt:new Date().toISOString()}],sessions:{currentUserId:null},projects:{}};
-    const DB_KEY="solar_home_free_json_db_v1";
-    function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||structuredClone(defaultDB)}catch{return structuredClone(defaultDB)}}
-    function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db,null,2));renderDatabasePreview();renderAdminDatabasePreview()}
-    function uid(){return "u_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)}
-    function ensureAdmin(){const db=getDB();let changed=false;if(!db.users.some(u=>u.role==='admin')){db.users.unshift({id:'admin_owner',name:'Solar Home Admin',email:ADMIN_EMAIL,password:ADMIN_PASSWORD,role:'admin',photo:'',createdAt:new Date().toISOString()});changed=true}db.users=db.users.map(u=>u.email===ADMIN_EMAIL?{...u,role:'admin',password:ADMIN_PASSWORD}:u);if(!db.projects)db.projects={};if(!db.sessions)db.sessions={currentUserId:null};if(changed||!localStorage.getItem(DB_KEY))saveDB(db);else localStorage.setItem(DB_KEY,JSON.stringify(db,null,2))}
+    const ADMIN_EMAIL = 'admin@solarhome.app';
+    const ADMIN_PASSWORD = 'shaladmin123';
+    const defaultDB = { users: [{ id: 'admin_owner', name: 'Solar Home Admin', email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: 'admin', photo: '', createdAt: new Date().toISOString() }], sessions: { currentUserId: null }, projects: {} };
+    const DB_KEY = "solar_home_free_json_db_v1";
+    function getDB() { try { return JSON.parse(localStorage.getItem(DB_KEY)) || structuredClone(defaultDB) } catch { return structuredClone(defaultDB) } }
+    function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db, null, 2)); renderDatabasePreview(); renderAdminDatabasePreview() }
+    function uid() { return "u_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7) }
+    function ensureAdmin() { const db = getDB(); let changed = false; if (!db.users.some(u => u.role === 'admin')) { db.users.unshift({ id: 'admin_owner', name: 'Solar Home Admin', email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: 'admin', photo: '', createdAt: new Date().toISOString() }); changed = true } db.users = db.users.map(u => u.email === ADMIN_EMAIL ? { ...u, role: 'admin', password: ADMIN_PASSWORD } : u); if (!db.projects) db.projects = {}; if (!db.sessions) db.sessions = { currentUserId: null }; if (changed || !localStorage.getItem(DB_KEY)) saveDB(db); else localStorage.setItem(DB_KEY, JSON.stringify(db, null, 2)) }
     ensureAdmin();
 
-    const appliances=[
-      {name:"LED Bulb",powerMin:3,powerMax:15,displayPower:"3W-15W",category:"Lighting",icon:"💡",tag:"Solar friendly",price:"UGX 15,000 - 35,000"},
-      {name:"Television",powerMin:40,powerMax:150,displayPower:"40W-150W",category:"Entertainment",icon:"📺",tag:"Common use",price:"UGX 250,000 - 1,200,000"},
-      {name:"Decoder",powerMin:20,powerMax:35,displayPower:"20W-35W",category:"Entertainment",icon:"▣",tag:"Low power",price:"UGX 120,000 - 300,000"},
-      {name:"Fridge",powerMin:100,powerMax:300,displayPower:"100W-300W",category:"Refrigeration",icon:"❄",tag:"High demand",price:"UGX 700,000 - 2,500,000"},
-      {name:"Washing Machine",powerMin:300,powerMax:800,displayPower:"300W-800W",category:"House Hold",icon:"◌",tag:"Heavy load",price:"UGX 800,000 - 2,200,000"},
-      {name:"Flat Iron",powerMin:1000,powerMax:1500,displayPower:"1000W-1500W",category:"House Hold",icon:"▱",tag:"Very high",price:"UGX 60,000 - 180,000"},
-      {name:"Vacuum Cleaner",powerMin:600,powerMax:1500,displayPower:"600W-1500W",category:"House Hold",icon:"⌁",tag:"Very high",price:"UGX 250,000 - 900,000"},
-      {name:"Kettle",powerMin:1000,powerMax:2200,displayPower:"1000W-2200W",category:"Kitchen",icon:"♨",tag:"Very high",price:"UGX 80,000 - 250,000"},
-      {name:"Microwave",powerMin:800,powerMax:1500,displayPower:"800W-1500W",category:"Kitchen",icon:"▤",tag:"Heavy load",price:"UGX 300,000 - 1,200,000"},
-      {name:"Blender",powerMin:300,powerMax:700,displayPower:"300W-700W",category:"Kitchen",icon:"◍",tag:"Medium load",price:"UGX 90,000 - 350,000"},
-      {name:"Rice Cooker",powerMin:400,powerMax:1000,displayPower:"400W-1000W",category:"Kitchen",icon:"◒",tag:"Medium load",price:"UGX 120,000 - 400,000"},
-      {name:"Fan",powerMin:40,powerMax:80,displayPower:"40W-80W",category:"Cooling",icon:"✺",tag:"Solar friendly",price:"UGX 90,000 - 300,000"},
-      {name:"Air Conditioner",powerMin:900,powerMax:2000,displayPower:"900W-2000W",category:"Cooling",icon:"❄",tag:"Very high",price:"UGX 1,500,000 - 4,500,000"},
-      {name:"Laptop",powerMin:45,powerMax:100,displayPower:"45W-100W",category:"Office",icon:"▰",tag:"Low power",price:"UGX 800,000 - 3,500,000"},
-      {name:"Desktop",powerMin:150,powerMax:300,displayPower:"150W-300W",category:"Office",icon:"▣",tag:"Medium load",price:"UGX 900,000 - 4,000,000"},
-      {name:"Router",powerMin:5,powerMax:20,displayPower:"5W-20W",category:"Office",icon:"⌁",tag:"Solar friendly",price:"UGX 120,000 - 350,000"},
-      {name:"Phone Charger",powerMin:5,powerMax:20,displayPower:"5W-20W",category:"Office",icon:"⚡",tag:"Low power",price:"UGX 20,000 - 80,000"}
+    const appliances = [
+      { name: "LED Bulb", powerMin: 3, powerMax: 15, displayPower: "3W-15W", category: "Lighting", icon: "💡", tag: "Solar friendly", price: "UGX 15,000 - 35,000" },
+      { name: "Television", powerMin: 40, powerMax: 150, displayPower: "40W-150W", category: "Entertainment", icon: "📺", tag: "Common use", price: "UGX 250,000 - 1,200,000" },
+      { name: "Decoder", powerMin: 20, powerMax: 35, displayPower: "20W-35W", category: "Entertainment", icon: "▣", tag: "Low power", price: "UGX 120,000 - 300,000" },
+      { name: "Fridge", powerMin: 100, powerMax: 300, displayPower: "100W-300W", category: "Refrigeration", icon: "❄", tag: "High demand", price: "UGX 700,000 - 2,500,000" },
+      { name: "Washing Machine", powerMin: 300, powerMax: 800, displayPower: "300W-800W", category: "House Hold", icon: "◌", tag: "Heavy load", price: "UGX 800,000 - 2,200,000" },
+      { name: "Flat Iron", powerMin: 1000, powerMax: 1500, displayPower: "1000W-1500W", category: "House Hold", icon: "▱", tag: "Very high", price: "UGX 60,000 - 180,000" },
+      { name: "Vacuum Cleaner", powerMin: 600, powerMax: 1500, displayPower: "600W-1500W", category: "House Hold", icon: "⌁", tag: "Very high", price: "UGX 250,000 - 900,000" },
+      { name: "Kettle", powerMin: 1000, powerMax: 2200, displayPower: "1000W-2200W", category: "Kitchen", icon: "♨", tag: "Very high", price: "UGX 80,000 - 250,000" },
+      { name: "Microwave", powerMin: 800, powerMax: 1500, displayPower: "800W-1500W", category: "Kitchen", icon: "▤", tag: "Heavy load", price: "UGX 300,000 - 1,200,000" },
+      { name: "Blender", powerMin: 300, powerMax: 700, displayPower: "300W-700W", category: "Kitchen", icon: "◍", tag: "Medium load", price: "UGX 90,000 - 350,000" },
+      { name: "Rice Cooker", powerMin: 400, powerMax: 1000, displayPower: "400W-1000W", category: "Kitchen", icon: "◒", tag: "Medium load", price: "UGX 120,000 - 400,000" },
+      { name: "Fan", powerMin: 40, powerMax: 80, displayPower: "40W-80W", category: "Cooling", icon: "✺", tag: "Solar friendly", price: "UGX 90,000 - 300,000" },
+      { name: "Air Conditioner", powerMin: 900, powerMax: 2000, displayPower: "900W-2000W", category: "Cooling", icon: "❄", tag: "Very high", price: "UGX 1,500,000 - 4,500,000" },
+      { name: "Laptop", powerMin: 45, powerMax: 100, displayPower: "45W-100W", category: "Office", icon: "▰", tag: "Low power", price: "UGX 800,000 - 3,500,000" },
+      { name: "Desktop", powerMin: 150, powerMax: 300, displayPower: "150W-300W", category: "Office", icon: "▣", tag: "Medium load", price: "UGX 900,000 - 4,000,000" },
+      { name: "Router", powerMin: 5, powerMax: 20, displayPower: "5W-20W", category: "Office", icon: "⌁", tag: "Solar friendly", price: "UGX 120,000 - 350,000" },
+      { name: "Phone Charger", powerMin: 5, powerMax: 20, displayPower: "5W-20W", category: "Office", icon: "⚡", tag: "Low power", price: "UGX 20,000 - 80,000" }
     ];
-    const SYSTEM_VOLTAGE=24, AC_VOLTAGE=240, PEAK_SUN_HOURS=5.5, LOSS_FACTOR=.85, BATTERY_DOD=.8, AUTONOMY_DAYS=1, POWER_FACTOR=.95, SAFETY_FACTOR=1.25, COPPER_RHO=1.724e-8;
-    let selectedCategory="all",currentHours=6,currentAppliance=null,myList=[],authMode="signin";
-    const $=id=>document.getElementById(id);
-    const pages=document.querySelectorAll(".app-page"), navItems=document.querySelectorAll(".nav-item");
+    const SYSTEM_VOLTAGE = 24, AC_VOLTAGE = 240, PEAK_SUN_HOURS = 5.5, LOSS_FACTOR = .85, BATTERY_DOD = .8, AUTONOMY_DAYS = 1, POWER_FACTOR = .95, SAFETY_FACTOR = 1.25, COPPER_RHO = 1.724e-8;
+    let selectedCategory = "all", currentHours = 6, currentAppliance = null, myList = [], authMode = "signin";
+    const $ = id => document.getElementById(id);
+    const pages = document.querySelectorAll(".app-page"), navItems = document.querySelectorAll(".nav-item");
 
-    function clean(v){return String(v||"").trim().replace(/[<>]/g,"")}
-    function toast(title,msg,type="ok"){const t=document.createElement("div");t.className="toast "+(type==="error"?"error":"");t.innerHTML=`<div class="toast-icon">${type==="error"?"!":"✓"}</div><div><div class="toast-title">${title}</div><div class="toast-message">${msg}</div></div>`;$("toastWrap").appendChild(t);setTimeout(()=>t.classList.add("hide"),2800);setTimeout(()=>t.remove(),3120)}
-    function currentUser(){const db=getDB();return db.users.find(u=>u.id===db.sessions.currentUserId)||null}
-    function initials(name){return (name||"Solar User").split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase()}
-    function saveProject(){const db=getDB();const u=currentUser();if(u){db.projects[u.id]={loads:myList,updatedAt:new Date().toISOString()};saveDB(db)}}
-    function loadProject(){const db=getDB();const u=currentUser();myList=u&&db.projects[u.id]?db.projects[u.id].loads||[]:[]}
+    function clean(v) { return String(v || "").trim().replace(/[<>]/g, "") }
+    function toast(title, msg, type = "ok") { const t = document.createElement("div"); t.className = "toast " + (type === "error" ? "error" : ""); t.innerHTML = `<div class="toast-icon">${type === "error" ? "!" : "✓"}</div><div><div class="toast-title">${title}</div><div class="toast-message">${msg}</div></div>`; $("toastWrap").appendChild(t); setTimeout(() => t.classList.add("hide"), 2800); setTimeout(() => t.remove(), 3120) }
+    function currentUser() { const db = getDB(); return db.users.find(u => u.id === db.sessions.currentUserId) || null }
+    function initials(name) { return (name || "Solar User").split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase() }
+    function saveProject() { const db = getDB(); const u = currentUser(); if (u) { db.projects[u.id] = { loads: myList, updatedAt: new Date().toISOString() }; saveDB(db) } }
+    function loadProject() { const db = getDB(); const u = currentUser(); myList = u && db.projects[u.id] ? db.projects[u.id].loads || [] : [] }
 
-    function setAuthMode(mode){authMode=mode;$("authTitle").textContent=mode==="signup"?"Sign Up":"Sign In";$("nameWrap").classList.toggle("hidden",mode!=="signup");$("termsWrap").classList.toggle("hidden",mode!=="signup");$("forgotPass").classList.toggle("hidden",mode==="signup");$("authSubmit").textContent=mode==="signup"?"Continue":"Sign In";$("authSwitchText").innerHTML=mode==="signup"?'Joined us before? <span id="authSwitch">Sign In</span>':'New to Solar Home? <span id="authSwitch">Register</span>';$("authSwitch").onclick=()=>setAuthMode(authMode==="signup"?"signin":"signup")}
-    function loginUser(u){const db=getDB();db.sessions.currentUserId=u.id;saveDB(db);loadProject();$("bottomNav").classList.remove("hidden");updateUserUI();showPage("homePage");toast("Welcome",`Hello ${u.name.split(" ")[0]}, Solar Home is ready.`)}
-    $("authSubmit").onclick=()=>{const email=clean($("authEmail").value).toLowerCase(),pass=$("authPassword").value,name=clean($("authName").value);const db=getDB();if(!email||!email.includes("@")){toast("Email needed","Enter a valid email address.","error");return}if(!pass||pass.length<4){toast("Password too short","Use at least 4 characters for this demo database.","error");return}if(authMode==="signup"){if(!name){toast("Name needed","Please enter your full name.","error");return}if(!$("termsCheck").checked){toast("Agreement needed","Tick the agreement box to continue.","error");return}if(email===ADMIN_EMAIL){toast("Reserved email","This email is reserved for the app owner.","error");return}if(db.users.some(u=>u.email===email)){toast("Account exists","Use Sign In instead.","error");return}const u={id:uid(),name,email,password:pass,photo:'',createdAt:new Date().toISOString()};db.users.push(u);db.projects[u.id]={loads:[],updatedAt:new Date().toISOString()};saveDB(db);loginUser(u)}else{const u=db.users.find(x=>x.email===email&&x.password===pass);if(!u){toast("Login failed","No user found with those details. Register first if you are new.","error");return}loginUser(u)}};
-    $("authSwitch").onclick=()=>setAuthMode("signup");$("togglePass").onclick=()=>{$("authPassword").type=$("authPassword").type==="password"?"text":"password"};$("forgotPass").onclick=()=>toast("Demo account","This free JSON demo stores passwords locally. Create a new account if needed.");
-    function socialLogin(provider){const db=getDB();const email=provider.toLowerCase()+"@social.solarhome.local";let u=db.users.find(x=>x.email===email);if(!u){u={id:uid(),name:provider+" User",email,password:"social-demo",provider,role:"user",photo:"",createdAt:new Date().toISOString()};db.users.push(u);db.projects[u.id]={loads:[],updatedAt:new Date().toISOString()};saveDB(db)}loginUser(u);toast(provider+" connected","Demo social login is active on this device.")}
-    document.querySelectorAll(".social[data-social]").forEach(btn=>btn.onclick=()=>socialLogin(btn.dataset.social));
+    function setAuthMode(mode) { authMode = mode; $("authTitle").textContent = mode === "signup" ? "Sign Up" : "Sign In"; $("nameWrap").classList.toggle("hidden", mode !== "signup"); $("termsWrap").classList.toggle("hidden", mode !== "signup"); $("forgotPass").classList.toggle("hidden", mode === "signup"); $("authSubmit").textContent = mode === "signup" ? "Continue" : "Sign In"; $("authSwitchText").innerHTML = mode === "signup" ? 'Joined us before? <span id="authSwitch">Sign In</span>' : 'New to Solar Home? <span id="authSwitch">Register</span>'; $("authSwitch").onclick = () => setAuthMode(authMode === "signup" ? "signin" : "signup") }
+    function loginUser(u) { const db = getDB(); db.sessions.currentUserId = u.id; saveDB(db); loadProject(); $("bottomNav").classList.remove("hidden"); updateUserUI(); showPage("homePage"); toast("Welcome", `Hello ${u.name.split(" ")[0]}, Solar Home is ready.`) }
+    $("authSubmit").onclick = () => { const email = clean($("authEmail").value).toLowerCase(), pass = $("authPassword").value, name = clean($("authName").value); const db = getDB(); if (!email || !email.includes("@")) { toast("Email needed", "Enter a valid email address.", "error"); return } if (!pass || pass.length < 4) { toast("Password too short", "Use at least 4 characters for this demo database.", "error"); return } if (authMode === "signup") { if (!name) { toast("Name needed", "Please enter your full name.", "error"); return } if (!$("termsCheck").checked) { toast("Agreement needed", "Tick the agreement box to continue.", "error"); return } if (email === ADMIN_EMAIL) { toast("Reserved email", "This email is reserved for the app owner.", "error"); return } if (db.users.some(u => u.email === email)) { toast("Account exists", "Use Sign In instead.", "error"); return } const u = { id: uid(), name, email, password: pass, photo: '', createdAt: new Date().toISOString() }; db.users.push(u); db.projects[u.id] = { loads: [], updatedAt: new Date().toISOString() }; saveDB(db); loginUser(u) } else { const u = db.users.find(x => x.email === email && x.password === pass); if (!u) { toast("Login failed", "No user found with those details. Register first if you are new.", "error"); return } loginUser(u) } };
+    $("authSwitch").onclick = () => setAuthMode("signup"); $("togglePass").onclick = () => { $("authPassword").type = $("authPassword").type === "password" ? "text" : "password" }; $("forgotPass").onclick = () => toast("Demo account", "This free JSON demo stores passwords locally. Create a new account if needed.");
+    function socialLogin(provider) { const db = getDB(); const email = provider.toLowerCase() + "@social.solarhome.local"; let u = db.users.find(x => x.email === email); if (!u) { u = { id: uid(), name: provider + " User", email, password: "social-demo", provider, role: "user", photo: "", createdAt: new Date().toISOString() }; db.users.push(u); db.projects[u.id] = { loads: [], updatedAt: new Date().toISOString() }; saveDB(db) } loginUser(u); toast(provider + " connected", "Demo social login is active on this device.") }
+    document.querySelectorAll(".social[data-social]").forEach(btn => btn.onclick = () => socialLogin(btn.dataset.social));
 
-    function showPage(id){pages.forEach(p=>p.classList.remove("active"));$(id).classList.add("active");navItems.forEach(n=>n.classList.toggle("active",n.dataset.page===id));if(id==="calcPage")renderCalc();if(id==="recommendPage")renderRecommendations();if(id==="profilePage")renderProfile();if(id==="adminPage")renderAdmin()}
-    navItems.forEach(n=>n.onclick=()=>showPage(n.dataset.page));
-    $("heroStartBtn").onclick=()=>$("customCard").scrollIntoView({behavior:"smooth",block:"center"});$("heroCalcBtn").onclick=()=>showPage("calcPage");$("goHomeAddBtn").onclick=()=>showPage("homePage");
+    function showPage(id) { pages.forEach(p => p.classList.remove("active")); $(id).classList.add("active"); navItems.forEach(n => n.classList.toggle("active", n.dataset.page === id)); if (id === "calcPage") renderCalc(); if (id === "recommendPage") renderRecommendations(); if (id === "profilePage") renderProfile(); if (id === "adminPage") renderAdmin() }
+    navItems.forEach(n => n.onclick = () => showPage(n.dataset.page));
+    $("heroStartBtn").onclick = () => $("customCard").scrollIntoView({ behavior: "smooth", block: "center" }); $("heroCalcBtn").onclick = () => showPage("calcPage"); $("goHomeAddBtn").onclick = () => showPage("homePage");
 
-    function renderCards(){const q=$("searchInput").value.toLowerCase().trim();const filtered=appliances.map((a,i)=>({...a,originalIndex:i})).filter(a=>(selectedCategory==="all"||a.category===selectedCategory)&&(a.name.toLowerCase().includes(q)||a.category.toLowerCase().includes(q)||a.displayPower.toLowerCase().includes(q)));$("applianceGrid").innerHTML=filtered.map(a=>`<div class="card appliance-card"><div><div class="appliance-top"><div class="appliance-icon">${a.icon}</div><button class="icon-btn" onclick="openOverlay(${a.originalIndex})">+</button></div><div class="card-name">${a.name}</div><div class="card-power">${a.displayPower}</div><div class="tag">☀ ${a.tag}</div></div><div class="price">${a.price}</div></div>`).join("")||`<div class="list-empty card" style="grid-column:1/-1">No appliance found.</div>`}
-    document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");selectedCategory=c.dataset.category;renderCards()});$("searchInput").oninput=renderCards;
-    window.openOverlay=i=>{currentAppliance=appliances[i];currentHours=6;$("selectedApplianceName").textContent=currentAppliance.name;$("selectedAppliancePower").textContent=currentAppliance.displayPower;updateHour();$("overlay").classList.add("show")};function updateHour(){$("hourDisplay").textContent=currentHours+" hrs"}$("closeOverlayBtn").onclick=()=>$("overlay").classList.remove("show");$("overlay").onclick=e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show")};$("minusBtn").onclick=()=>{if(currentHours>1){currentHours--;updateHour()}};$("plusBtn").onclick=()=>{if(currentHours<24){currentHours++;updateHour()}};
-    function avg(a){return(a.powerMin+a.powerMax)/2}
-    $("addApplianceBtn").onclick=()=>{if(!currentAppliance)return;const p=avg(currentAppliance);myList.push({name:currentAppliance.name,category:currentAppliance.category,displayPower:currentAppliance.displayPower,avgPower:p,hours:currentHours,dailyEnergy:p*currentHours});saveProject();toast("Appliance added",`${currentAppliance.name} added to calculator.`);$("overlay").classList.remove("show");renderCalc();renderRecommendations()};
-    $("addCustomBtn").onclick=()=>{const name=clean($("customName").value),power=Number($("customPower").value),hours=Number($("customHours").value);if(!name){toast("Name needed","Write the appliance name first.","error");return}if(!Number.isFinite(power)||power<=0){toast("Wrong rating","Enter a valid rating in watts, for example 60 or 750.","error");return}if(power>10000){toast("Rating too high","Confirm the watt rating from the appliance label.","error");return}if(!Number.isFinite(hours)||hours<=0||hours>24){toast("Wrong hours","Hours must be more than 0 and not more than 24.","error");return}myList.push({name,category:"Custom",displayPower:`${power}W`,avgPower:power,hours,dailyEnergy:power*hours,isCustom:true});$("customName").value=$("customPower").value=$("customHours").value="";saveProject();toast("Custom added",`${name} added to calculator.`);renderCalc();renderRecommendations()};
+    function renderCards() { const q = $("searchInput").value.toLowerCase().trim(); const filtered = appliances.map((a, i) => ({ ...a, originalIndex: i })).filter(a => (selectedCategory === "all" || a.category === selectedCategory) && (a.name.toLowerCase().includes(q) || a.category.toLowerCase().includes(q) || a.displayPower.toLowerCase().includes(q))); $("applianceGrid").innerHTML = filtered.map(a => `<div class="card appliance-card"><div><div class="appliance-top"><div class="appliance-icon">${a.icon}</div><button class="icon-btn" onclick="openOverlay(${a.originalIndex})">+</button></div><div class="card-name">${a.name}</div><div class="card-power">${a.displayPower}</div><div class="tag">☀ ${a.tag}</div></div><div class="price">${a.price}</div></div>`).join("") || `<div class="list-empty card" style="grid-column:1/-1">No appliance found.</div>` }
+    document.querySelectorAll(".chip").forEach(c => c.onclick = () => { document.querySelectorAll(".chip").forEach(x => x.classList.remove("active")); c.classList.add("active"); selectedCategory = c.dataset.category; renderCards() }); $("searchInput").oninput = renderCards;
+    window.openOverlay = i => { currentAppliance = appliances[i]; currentHours = 6; $("selectedApplianceName").textContent = currentAppliance.name; $("selectedAppliancePower").textContent = currentAppliance.displayPower; updateHour(); $("overlay").classList.add("show") }; function updateHour() { $("hourDisplay").textContent = currentHours + " hrs" } $("closeOverlayBtn").onclick = () => $("overlay").classList.remove("show"); $("overlay").onclick = e => { if (e.target === $("overlay")) $("overlay").classList.remove("show") }; $("minusBtn").onclick = () => { if (currentHours > 1) { currentHours--; updateHour() } }; $("plusBtn").onclick = () => { if (currentHours < 24) { currentHours++; updateHour() } };
+    function avg(a) { return (a.powerMin + a.powerMax) / 2 }
+    $("addApplianceBtn").onclick = () => { if (!currentAppliance) return; const p = avg(currentAppliance); myList.push({ name: currentAppliance.name, category: currentAppliance.category, displayPower: currentAppliance.displayPower, avgPower: p, hours: currentHours, dailyEnergy: p * currentHours }); saveProject(); toast("Appliance added", `${currentAppliance.name} added to calculator.`); $("overlay").classList.remove("show"); renderCalc(); renderRecommendations() };
+    $("addCustomBtn").onclick = () => { const name = clean($("customName").value), power = Number($("customPower").value), hours = Number($("customHours").value); if (!name) { toast("Name needed", "Write the appliance name first.", "error"); return } if (!Number.isFinite(power) || power <= 0) { toast("Wrong rating", "Enter a valid rating in watts, for example 60 or 750.", "error"); return } if (power > 10000) { toast("Rating too high", "Confirm the watt rating from the appliance label.", "error"); return } if (!Number.isFinite(hours) || hours <= 0 || hours > 24) { toast("Wrong hours", "Hours must be more than 0 and not more than 24.", "error"); return } myList.push({ name, category: "Custom", displayPower: `${power}W`, avgPower: power, hours, dailyEnergy: power * hours, isCustom: true }); $("customName").value = $("customPower").value = $("customHours").value = ""; saveProject(); toast("Custom added", `${name} added to calculator.`); renderCalc(); renderRecommendations() };
 
-    function roundUp(value,step){return value>0?Math.ceil(value/step)*step:0}
-    function cableArea(current,length,voltage=SYSTEM_VOLTAGE){const vdrop=voltage*0.04;return current>0?((COPPER_RHO*length*current*2)/vdrop)*1e6:0}
-    function calc(){const totalEnergyWh=myList.reduce((s,i)=>s+i.dailyEnergy,0),totalPowerW=myList.reduce((s,i)=>s+i.avgPower,0);const panelPowerWp=totalEnergyWh?totalEnergyWh/PEAK_SUN_HOURS/LOSS_FACTOR:0;const batteryKwh=totalEnergyWh?(totalEnergyWh*AUTONOMY_DAYS)/1000/BATTERY_DOD:0;const batteryAh=totalEnergyWh?(totalEnergyWh*AUTONOMY_DAYS)/(SYSTEM_VOLTAGE*BATTERY_DOD):0;const inverterW=totalPowerW?totalPowerW*SAFETY_FACTOR:0;const inverterKva=inverterW/(1000*POWER_FACTOR);const loadCurrent=totalPowerW?totalPowerW/SYSTEM_VOLTAGE:0;const arrayCurrent=panelPowerWp?panelPowerWp/SYSTEM_VOLTAGE:0;const controllerCurrent=roundUp(Math.max(arrayCurrent,loadCurrent)*SAFETY_FACTOR,10);const pvCable=cableArea(arrayCurrent*SAFETY_FACTOR,5);const controllerCable=cableArea(controllerCurrent,2);const batteryCable=cableArea(inverterW/SYSTEM_VOLTAGE,2);const acCable=cableArea(inverterW/(AC_VOLTAGE*POWER_FACTOR),10,AC_VOLTAGE);return{totalEnergyWh,totalPowerW,panelPowerWp,batteryKwh,batteryAh,inverterW,inverterKva,estimatedCurrent:loadCurrent,arrayCurrent,controllerCurrent,pvCable,controllerCable,batteryCable,acCable}}
-    function renderCalc(){const c=calc();$("applianceCountText").textContent=myList.length;$("totalEnergyWhText").textContent=Math.round(c.totalEnergyWh).toLocaleString()+" Wh/day";$("totalEnergyKwhText").textContent=(c.totalEnergyWh/1000).toFixed(3)+" kWh per day";$("panelPowerText").textContent=Math.ceil(c.panelPowerWp).toLocaleString()+" Wp";$("batteryText").textContent=c.batteryKwh.toFixed(1)+" kWh";$("inverterText").textContent=c.inverterKva.toFixed(2)+" kVA";$("currentText").textContent=c.estimatedCurrent.toFixed(2)+" A";if($("controllerText"))$("controllerText").textContent=c.controllerCurrent.toFixed(0)+" A";if($("batteryAhText"))$("batteryAhText").textContent=Math.ceil(c.batteryAh).toLocaleString()+" Ah";if($("pvCableText"))$("pvCableText").textContent=c.pvCable.toFixed(1)+" mm²";if($("batteryCableText"))$("batteryCableText").textContent=c.batteryCable.toFixed(1)+" mm²";$("totalTableWhText").textContent=Math.round(c.totalEnergyWh).toLocaleString()+" Wh/day";$("myListCard").innerHTML=myList.length?myList.map((i,idx)=>`<div class="list-row"><div><div class="list-name">${i.name}</div><div class="list-meta">${i.displayPower} • ${i.hours} hrs/day ${i.isCustom?"• Custom":""}</div><button class="remove-btn" onclick="removeItem(${idx})">Remove</button></div><div class="list-energy">${Math.round(i.dailyEnergy).toLocaleString()} Wh/day</div></div>`).join(""):`<div class="list-empty">No appliance added yet.<br>Go to Home and add appliances first.</div>`;$("selectedTable").innerHTML=myList.length?myList.map(i=>`<div class="table-row"><div class="table-name">${i.name}<br><span style="color:var(--muted);font-weight:800">${i.displayPower}</span></div><div class="table-energy">${Math.round(i.dailyEnergy).toLocaleString()} Wh/day</div></div>`).join(""):`<div class="table-row"><div class="table-name">No appliance selected yet</div><div class="table-energy">0 Wh/day</div></div>`;renderSketch("liveSketchCalc")}
-    window.removeItem=idx=>{const r=myList.splice(idx,1)[0];saveProject();toast("Removed",`${r.name} removed.`);renderCalc();renderRecommendations()};$("clearListBtn").onclick=()=>{myList=[];saveProject();toast("List cleared","All appliances removed.");renderCalc();renderRecommendations()};$("viewRecommendationsBtn").onclick=()=>showPage("recommendPage");
-    function panelExample(wp){const r=Math.ceil(wp);if(r<=0)return"Example: no panel yet";if(r<=200)return`Example: 1 × ${r}W panel`;if(r<=840)return`Example: 2 × ${Math.ceil(r/2)}W panels`;return`Example: 3 × ${Math.ceil(r/3)}W panels`}
-    function batteryExample(k){if(k<=0)return"Example: no battery yet";if(k<=2.6)return"Example: 2 × 12V 100Ah batteries";if(k<=5.2)return"Example: 4 × 12V 100Ah batteries";if(k<=10.5)return"Example: 2 × 24V 200Ah batteries";return"Example: 4 × 24V 200Ah batteries"}
-    function smart(wh){if(wh<=0)return"Add Appliances To Get A Smart Recommendation";if(wh<1500)return"A Small Solar System Will Perfectly Power Your House!";if(wh<4000)return"A Medium Solar System Is Best For Your Daily Needs!";return"A Bigger Solar System Is Recommended For Your Heavy Loads!"}
-function sketchLoadDots(){const shown=myList.slice(0,8);if(!shown.length)return `<text x="455" y="260" class="sketch-note">Add appliances to see load dots</text>`;return shown.map((l,i)=>{const x=430+(i%4)*48,y=230+Math.floor(i/4)*54;return `<g class="sketch-load-dot" style="animation-delay:${i*.05}s"><circle cx="${x}" cy="${y}" r="17" fill="#FFFFFF" stroke="#E7ECF5"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="15">${(l.name||'?').slice(0,1)}</text><text x="${x}" y="${y+31}" text-anchor="middle" class="sketch-note">${Math.round(l.dailyEnergy)}Wh</text></g>`}).join("")}
-    function renderSketch(id){const el=$(id);if(!el)return;const c=calc();el.innerHTML=`<svg class="solar-svg" viewBox="0 0 650 330" role="img" aria-label="Interactive solar connection sketch"><defs><linearGradient id="panelG" x1="0" x2="1"><stop offset="0" stop-color="#1E2A78"/><stop offset="1" stop-color="#2563EB"/></linearGradient><linearGradient id="greenG" x1="0" x2="1"><stop offset="0" stop-color="#20C997"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path class="sketch-line" d="M130 110 C175 110 185 110 225 110"/><path class="sketch-line bat" d="M305 135 C305 165 305 170 305 195"/><path class="sketch-line" d="M385 110 C425 110 435 110 470 110"/><path class="sketch-line ac" d="M535 135 C560 165 560 205 540 230"/><g class="sketch-node"><rect x="35" y="55" width="95" height="82" rx="14" fill="url(#panelG)"/><path d="M50 70h65M50 90h65M50 110h65M67 62v68M91 62v68" stroke="rgba(255,255,255,.38)"/><text x="82" y="158" text-anchor="middle" class="sketch-label">PV Array</text><text x="82" y="174" text-anchor="middle" class="sketch-value">${Math.ceil(c.panelPowerWp).toLocaleString()} Wp</text></g><g class="sketch-node"><rect x="220" y="70" width="90" height="80" rx="18" fill="#fff" stroke="#E7ECF5"/><circle cx="245" cy="105" r="13" fill="#EAF2FF"/><circle cx="285" cy="105" r="13" fill="#E7FFF6"/><text x="265" y="164" text-anchor="middle" class="sketch-label">Controller</text><text x="265" y="180" text-anchor="middle" class="sketch-value">${c.controllerCurrent.toFixed(0)} A</text></g><g class="sketch-node"><rect x="255" y="205" width="100" height="58" rx="14" fill="#FFF8DF" stroke="#F3C332"/><rect x="355" y="224" width="8" height="20" rx="3" fill="#F3C332"/><text x="305" y="237" text-anchor="middle" class="sketch-label">Battery</text><text x="305" y="282" text-anchor="middle" class="sketch-value">${c.batteryKwh.toFixed(1)} kWh • ${Math.ceil(c.batteryAh)}Ah</text></g><g class="sketch-node"><rect x="470" y="70" width="85" height="80" rx="18" fill="url(#greenG)"/><path d="M495 104h35M512 88v33" stroke="#fff" stroke-width="4" stroke-linecap="round"/><text x="512" y="164" text-anchor="middle" class="sketch-label">Inverter</text><text x="512" y="180" text-anchor="middle" class="sketch-value">${c.inverterKva.toFixed(2)} kVA</text></g><g>${sketchLoadDots()}<text x="505" y="315" text-anchor="middle" class="sketch-note">Loads update automatically as appliances are added</text></g></svg><div><span class="sketch-chip">PV cable ${c.pvCable.toFixed(1)}mm²</span><span class="sketch-chip">Battery cable ${c.batteryCable.toFixed(1)}mm²</span><span class="sketch-chip">AC cable ${c.acCable.toFixed(1)}mm²</span></div>`}
-        function renderRecommendations(){const c=calc();$("smartRecommendationText").textContent=smart(c.totalEnergyWh);$("recommendPanelText").textContent=Math.ceil(c.panelPowerWp).toLocaleString()+" Wp";$("recommendPanelSub").textContent=panelExample(c.panelPowerWp);$("recommendBatteryText").textContent=c.batteryKwh.toFixed(1)+" kWh";$("recommendBatterySub").textContent=batteryExample(c.batteryKwh)+` • ${Math.ceil(c.batteryAh).toLocaleString()}Ah at ${SYSTEM_VOLTAGE}V`;$("recommendInverterText").textContent=c.inverterKva.toFixed(2)+" kVA";if($("recommendInverterSub"))$("recommendInverterSub").textContent=`${Math.ceil(c.inverterW).toLocaleString()}W minimum with ${Math.round((SAFETY_FACTOR-1)*100)}% surge margin.`;if($("recommendControllerText"))$("recommendControllerText").textContent=c.controllerCurrent.toFixed(0)+" A";if($("recommendControllerSub"))$("recommendControllerSub").textContent=`Array current ${c.arrayCurrent.toFixed(1)}A, load current ${c.estimatedCurrent.toFixed(1)}A at ${SYSTEM_VOLTAGE}V.`;if($("recommendCableText"))$("recommendCableText").textContent=Math.max(c.pvCable,c.controllerCable,c.batteryCable,c.acCable).toFixed(1)+" mm²";if($("recommendCableSub"))$("recommendCableSub").textContent=`PV ${c.pvCable.toFixed(1)}mm² • Controller ${c.controllerCable.toFixed(1)}mm² • Battery ${c.batteryCable.toFixed(1)}mm² • AC ${c.acCable.toFixed(1)}mm²`;renderSketch("liveSketchFinal")}
-    function summary(){const c=calc();return{applianceCount:myList.length,totalEnergyWh:Math.round(c.totalEnergyWh),totalEnergyKwh:(c.totalEnergyWh/1000).toFixed(3),panelPowerWp:Math.ceil(c.panelPowerWp),batteryKwh:c.batteryKwh.toFixed(1),batteryAh:Math.ceil(c.batteryAh),inverterW:Math.ceil(c.inverterW),inverterKva:c.inverterKva.toFixed(2),controllerCurrent:c.controllerCurrent.toFixed(0),pvCable:c.pvCable.toFixed(1),batteryCable:c.batteryCable.toFixed(1),acCable:c.acCable.toFixed(1),estimatedCurrent:c.estimatedCurrent.toFixed(2),recommendation:smart(c.totalEnergyWh),panelExample:panelExample(c.panelPowerWp),batteryExample:batteryExample(c.batteryKwh)}}
-    $("saveRecommendationBtn").onclick=()=>{const jsPDFLib=window.jspdf;if(!jsPDFLib||!jsPDFLib.jsPDF){toast("PDF not ready","Try again in a moment.","error");return}const s=summary(),{jsPDF}=jsPDFLib,doc=new jsPDF();let y=18;doc.setFont("helvetica","bold");doc.setFontSize(18);doc.text("Solar Home Recommendation",14,y);y+=10;doc.setFont("helvetica","normal");doc.setFontSize(11);[`Selected appliances: ${s.applianceCount}`,`Total daily energy: ${s.totalEnergyWh.toLocaleString()} Wh/day (${s.totalEnergyKwh} kWh/day)`,`Panel power needed: ${s.panelPowerWp.toLocaleString()} Wp`,`Battery capacity: ${s.batteryKwh} kWh (${s.batteryAh} Ah at 24V)`,`Inverter size: ${s.inverterKva} kVA (${s.inverterW} W)`,`Charge controller: ${s.controllerCurrent} A`,`Estimated current: ${s.estimatedCurrent} A`,`Cable sizes: PV ${s.pvCable} mm2, Battery ${s.batteryCable} mm2, AC ${s.acCable} mm2`,`Recommendation: ${s.recommendation}`,`Panel example: ${s.panelExample}`,`Battery example: ${s.batteryExample}`].forEach(line=>{doc.text(doc.splitTextToSize(line,180),14,y);y+=8});y+=4;doc.setFont("helvetica","bold");doc.text("Appliance List",14,y);y+=8;doc.setFont("helvetica","normal");myList.forEach((i,n)=>{if(y>270){doc.addPage();y=18}doc.text(doc.splitTextToSize(`${n+1}. ${i.name} - ${i.displayPower} - ${i.hours} hrs/day - ${Math.round(i.dailyEnergy)} Wh/day`,180),14,y);y+=8});doc.save("solar-home-recommendation.pdf");toast("PDF saved","Recommendation downloaded.")};
-    $("shareResultsBtn").onclick=async()=>{const s=summary();const text=`Solar Home Results\nEnergy: ${s.totalEnergyWh.toLocaleString()} Wh/day (${s.totalEnergyKwh} kWh/day)\nPanels: ${s.panelPowerWp.toLocaleString()} Wp\nBattery: ${s.batteryKwh} kWh\nInverter: ${s.inverterKva} kVA\nRecommendation: ${s.recommendation}`;if(navigator.share){try{await navigator.share({title:"Solar Home Results",text,url:location.href})}catch(e){if(e.name!=="AbortError")toast("Sharing failed","Try copying instead.","error")}}else if(navigator.clipboard){await navigator.clipboard.writeText(text+"\n"+location.href);toast("Copied","Results copied to clipboard.")}else toast("Unavailable","Sharing is not supported here.","error")};
-    function setAvatar(el,user){if(!el||!user)return;if(user.photo){el.innerHTML=`<img src="${user.photo}" alt="Profile picture">`}else{el.textContent=initials(user.name)}}function updateOwnerVisibility(){const u=currentUser();const isAdmin=!!(u&&u.role==="admin");document.querySelectorAll(".owner-only").forEach(el=>el.style.display=isAdmin?"":"none");document.querySelectorAll(".bottom-nav .nav-item").forEach(el=>el.style.width=isAdmin?"20%":"25%")}
-    function updateUserUI(){const u=currentUser();if(!u)return;setAvatar($("homeAvatar"),u);setAvatar($("profileAvatar"),u);setAvatar($("photoPreview"),u);$("profileName").textContent=u.name;$("profileEmail").textContent=u.email;$("profileNameInput").value=u.name;$("profileEmailInput").value=u.email;updateOwnerVisibility();renderProfile();renderAdmin()}
-    function renderProfile(){const u=currentUser();if(!u)return;const c=calc();$("profileName").textContent=u.name;$("profileEmail").textContent=u.email;setAvatar($("profileAvatar"),u);setAvatar($("photoPreview"),u);$("profileLoads").textContent=myList.length;$("profileEnergy").textContent=Math.round(c.totalEnergyWh).toLocaleString();$("profilePanels").textContent=Math.ceil(c.panelPowerWp).toLocaleString();$("profileNameInput").value=u.name;$("profileEmailInput").value=u.email;renderDatabasePreview()}
-    function renderDatabasePreview(){const el=$("databasePreview");if(el)el.textContent=JSON.stringify(getDB(),null,2)}
+    function roundUp(value, step) { return value > 0 ? Math.ceil(value / step) * step : 0 }
+    function cableArea(current, length, voltage = SYSTEM_VOLTAGE) { const vdrop = voltage * 0.04; return current > 0 ? ((COPPER_RHO * length * current * 2) / vdrop) * 1e6 : 0 }
+    function calc() { const totalEnergyWh = myList.reduce((s, i) => s + i.dailyEnergy, 0), totalPowerW = myList.reduce((s, i) => s + i.avgPower, 0); const panelPowerWp = totalEnergyWh ? totalEnergyWh / PEAK_SUN_HOURS / LOSS_FACTOR : 0; const batteryKwh = totalEnergyWh ? (totalEnergyWh * AUTONOMY_DAYS) / 1000 / BATTERY_DOD : 0; const batteryAh = totalEnergyWh ? (totalEnergyWh * AUTONOMY_DAYS) / (SYSTEM_VOLTAGE * BATTERY_DOD) : 0; const inverterW = totalPowerW ? totalPowerW * SAFETY_FACTOR : 0; const inverterKva = inverterW / (1000 * POWER_FACTOR); const loadCurrent = totalPowerW ? totalPowerW / SYSTEM_VOLTAGE : 0; const arrayCurrent = panelPowerWp ? panelPowerWp / SYSTEM_VOLTAGE : 0; const controllerCurrent = roundUp(Math.max(arrayCurrent, loadCurrent) * SAFETY_FACTOR, 10); const pvCable = cableArea(arrayCurrent * SAFETY_FACTOR, 5); const controllerCable = cableArea(controllerCurrent, 2); const batteryCable = cableArea(inverterW / SYSTEM_VOLTAGE, 2); const acCable = cableArea(inverterW / (AC_VOLTAGE * POWER_FACTOR), 10, AC_VOLTAGE); return { totalEnergyWh, totalPowerW, panelPowerWp, batteryKwh, batteryAh, inverterW, inverterKva, estimatedCurrent: loadCurrent, arrayCurrent, controllerCurrent, pvCable, controllerCable, batteryCable, acCable } }
+    function renderCalc() { const c = calc(); $("applianceCountText").textContent = myList.length; $("totalEnergyWhText").textContent = Math.round(c.totalEnergyWh).toLocaleString() + " Wh/day"; $("totalEnergyKwhText").textContent = (c.totalEnergyWh / 1000).toFixed(3) + " kWh per day"; $("panelPowerText").textContent = Math.ceil(c.panelPowerWp).toLocaleString() + " Wp"; $("batteryText").textContent = c.batteryKwh.toFixed(1) + " kWh"; $("inverterText").textContent = c.inverterKva.toFixed(2) + " kVA"; $("currentText").textContent = c.estimatedCurrent.toFixed(2) + " A"; if ($("controllerText")) $("controllerText").textContent = c.controllerCurrent.toFixed(0) + " A"; if ($("batteryAhText")) $("batteryAhText").textContent = Math.ceil(c.batteryAh).toLocaleString() + " Ah"; if ($("pvCableText")) $("pvCableText").textContent = c.pvCable.toFixed(1) + " mm²"; if ($("batteryCableText")) $("batteryCableText").textContent = c.batteryCable.toFixed(1) + " mm²"; $("totalTableWhText").textContent = Math.round(c.totalEnergyWh).toLocaleString() + " Wh/day"; $("myListCard").innerHTML = myList.length ? myList.map((i, idx) => `<div class="list-row"><div><div class="list-name">${i.name}</div><div class="list-meta">${i.displayPower} • ${i.hours} hrs/day ${i.isCustom ? "• Custom" : ""}</div><button class="remove-btn" onclick="removeItem(${idx})">Remove</button></div><div class="list-energy">${Math.round(i.dailyEnergy).toLocaleString()} Wh/day</div></div>`).join("") : `<div class="list-empty">No appliance added yet.<br>Go to Home and add appliances first.</div>`; $("selectedTable").innerHTML = myList.length ? myList.map(i => `<div class="table-row"><div class="table-name">${i.name}<br><span style="color:var(--muted);font-weight:800">${i.displayPower}</span></div><div class="table-energy">${Math.round(i.dailyEnergy).toLocaleString()} Wh/day</div></div>`).join("") : `<div class="table-row"><div class="table-name">No appliance selected yet</div><div class="table-energy">0 Wh/day</div></div>`; renderSketch("liveSketchCalc") }
+    window.removeItem = idx => { const r = myList.splice(idx, 1)[0]; saveProject(); toast("Removed", `${r.name} removed.`); renderCalc(); renderRecommendations() }; $("clearListBtn").onclick = () => { myList = []; saveProject(); toast("List cleared", "All appliances removed."); renderCalc(); renderRecommendations() }; $("viewRecommendationsBtn").onclick = () => showPage("recommendPage");
+    function panelExample(wp) { const r = Math.ceil(wp); if (r <= 0) return "Example: no panel yet"; if (r <= 200) return `Example: 1 × ${r}W panel`; if (r <= 840) return `Example: 2 × ${Math.ceil(r / 2)}W panels`; return `Example: 3 × ${Math.ceil(r / 3)}W panels` }
+    function batteryExample(k) { if (k <= 0) return "Example: no battery yet"; if (k <= 2.6) return "Example: 2 × 12V 100Ah batteries"; if (k <= 5.2) return "Example: 4 × 12V 100Ah batteries"; if (k <= 10.5) return "Example: 2 × 24V 200Ah batteries"; return "Example: 4 × 24V 200Ah batteries" }
+    function smart(wh) { if (wh <= 0) return "Add Appliances To Get A Smart Recommendation"; if (wh < 1500) return "A Small Solar System Will Perfectly Power Your House!"; if (wh < 4000) return "A Medium Solar System Is Best For Your Daily Needs!"; return "A Bigger Solar System Is Recommended For Your Heavy Loads!" }
+    function sketchLoadDots() { const shown = myList.slice(0, 8); if (!shown.length) return `<text x="455" y="260" class="sketch-note">Add appliances to see load dots</text>`; return shown.map((l, i) => { const x = 430 + (i % 4) * 48, y = 230 + Math.floor(i / 4) * 54; return `<g class="sketch-load-dot" style="animation-delay:${i * .05}s"><circle cx="${x}" cy="${y}" r="17" fill="#FFFFFF" stroke="#E7ECF5"/><text x="${x}" y="${y + 4}" text-anchor="middle" font-size="15">${(l.name || '?').slice(0, 1)}</text><text x="${x}" y="${y + 31}" text-anchor="middle" class="sketch-note">${Math.round(l.dailyEnergy)}Wh</text></g>` }).join("") }
+    function renderSketch(id) { const el = $(id); if (!el) return; const c = calc(); el.innerHTML = `<svg class="solar-svg" viewBox="0 0 650 330" role="img" aria-label="Interactive solar connection sketch"><defs><linearGradient id="panelG" x1="0" x2="1"><stop offset="0" stop-color="#1E2A78"/><stop offset="1" stop-color="#2563EB"/></linearGradient><linearGradient id="greenG" x1="0" x2="1"><stop offset="0" stop-color="#20C997"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path class="sketch-line" d="M130 110 C175 110 185 110 225 110"/><path class="sketch-line bat" d="M305 135 C305 165 305 170 305 195"/><path class="sketch-line" d="M385 110 C425 110 435 110 470 110"/><path class="sketch-line ac" d="M535 135 C560 165 560 205 540 230"/><g class="sketch-node"><rect x="35" y="55" width="95" height="82" rx="14" fill="url(#panelG)"/><path d="M50 70h65M50 90h65M50 110h65M67 62v68M91 62v68" stroke="rgba(255,255,255,.38)"/><text x="82" y="158" text-anchor="middle" class="sketch-label">PV Array</text><text x="82" y="174" text-anchor="middle" class="sketch-value">${Math.ceil(c.panelPowerWp).toLocaleString()} Wp</text></g><g class="sketch-node"><rect x="220" y="70" width="90" height="80" rx="18" fill="#fff" stroke="#E7ECF5"/><circle cx="245" cy="105" r="13" fill="#EAF2FF"/><circle cx="285" cy="105" r="13" fill="#E7FFF6"/><text x="265" y="164" text-anchor="middle" class="sketch-label">Controller</text><text x="265" y="180" text-anchor="middle" class="sketch-value">${c.controllerCurrent.toFixed(0)} A</text></g><g class="sketch-node"><rect x="255" y="205" width="100" height="58" rx="14" fill="#FFF8DF" stroke="#F3C332"/><rect x="355" y="224" width="8" height="20" rx="3" fill="#F3C332"/><text x="305" y="237" text-anchor="middle" class="sketch-label">Battery</text><text x="305" y="282" text-anchor="middle" class="sketch-value">${c.batteryKwh.toFixed(1)} kWh • ${Math.ceil(c.batteryAh)}Ah</text></g><g class="sketch-node"><rect x="470" y="70" width="85" height="80" rx="18" fill="url(#greenG)"/><path d="M495 104h35M512 88v33" stroke="#fff" stroke-width="4" stroke-linecap="round"/><text x="512" y="164" text-anchor="middle" class="sketch-label">Inverter</text><text x="512" y="180" text-anchor="middle" class="sketch-value">${c.inverterKva.toFixed(2)} kVA</text></g><g>${sketchLoadDots()}<text x="505" y="315" text-anchor="middle" class="sketch-note">Loads update automatically as appliances are added</text></g></svg><div><span class="sketch-chip">PV cable ${c.pvCable.toFixed(1)}mm²</span><span class="sketch-chip">Battery cable ${c.batteryCable.toFixed(1)}mm²</span><span class="sketch-chip">AC cable ${c.acCable.toFixed(1)}mm²</span></div>` }
+    function renderRecommendations() { const c = calc(); $("smartRecommendationText").textContent = smart(c.totalEnergyWh); $("recommendPanelText").textContent = Math.ceil(c.panelPowerWp).toLocaleString() + " Wp"; $("recommendPanelSub").textContent = panelExample(c.panelPowerWp); $("recommendBatteryText").textContent = c.batteryKwh.toFixed(1) + " kWh"; $("recommendBatterySub").textContent = batteryExample(c.batteryKwh) + ` • ${Math.ceil(c.batteryAh).toLocaleString()}Ah at ${SYSTEM_VOLTAGE}V`; $("recommendInverterText").textContent = c.inverterKva.toFixed(2) + " kVA"; if ($("recommendInverterSub")) $("recommendInverterSub").textContent = `${Math.ceil(c.inverterW).toLocaleString()}W minimum with ${Math.round((SAFETY_FACTOR - 1) * 100)}% surge margin.`; if ($("recommendControllerText")) $("recommendControllerText").textContent = c.controllerCurrent.toFixed(0) + " A"; if ($("recommendControllerSub")) $("recommendControllerSub").textContent = `Array current ${c.arrayCurrent.toFixed(1)}A, load current ${c.estimatedCurrent.toFixed(1)}A at ${SYSTEM_VOLTAGE}V.`; if ($("recommendCableText")) $("recommendCableText").textContent = Math.max(c.pvCable, c.controllerCable, c.batteryCable, c.acCable).toFixed(1) + " mm²"; if ($("recommendCableSub")) $("recommendCableSub").textContent = `PV ${c.pvCable.toFixed(1)}mm² • Controller ${c.controllerCable.toFixed(1)}mm² • Battery ${c.batteryCable.toFixed(1)}mm² • AC ${c.acCable.toFixed(1)}mm²`; renderSketch("liveSketchFinal") }
+    function summary() { const c = calc(); return { applianceCount: myList.length, totalEnergyWh: Math.round(c.totalEnergyWh), totalEnergyKwh: (c.totalEnergyWh / 1000).toFixed(3), panelPowerWp: Math.ceil(c.panelPowerWp), batteryKwh: c.batteryKwh.toFixed(1), batteryAh: Math.ceil(c.batteryAh), inverterW: Math.ceil(c.inverterW), inverterKva: c.inverterKva.toFixed(2), controllerCurrent: c.controllerCurrent.toFixed(0), pvCable: c.pvCable.toFixed(1), batteryCable: c.batteryCable.toFixed(1), acCable: c.acCable.toFixed(1), estimatedCurrent: c.estimatedCurrent.toFixed(2), recommendation: smart(c.totalEnergyWh), panelExample: panelExample(c.panelPowerWp), batteryExample: batteryExample(c.batteryKwh) } }
+    $("saveRecommendationBtn").onclick = () => { const jsPDFLib = window.jspdf; if (!jsPDFLib || !jsPDFLib.jsPDF) { toast("PDF not ready", "Try again in a moment.", "error"); return } const s = summary(), { jsPDF } = jsPDFLib, doc = new jsPDF(); let y = 18; doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.text("Solar Home Recommendation", 14, y); y += 10; doc.setFont("helvetica", "normal"); doc.setFontSize(11);[`Selected appliances: ${s.applianceCount}`, `Total daily energy: ${s.totalEnergyWh.toLocaleString()} Wh/day (${s.totalEnergyKwh} kWh/day)`, `Panel power needed: ${s.panelPowerWp.toLocaleString()} Wp`, `Battery capacity: ${s.batteryKwh} kWh (${s.batteryAh} Ah at 24V)`, `Inverter size: ${s.inverterKva} kVA (${s.inverterW} W)`, `Charge controller: ${s.controllerCurrent} A`, `Estimated current: ${s.estimatedCurrent} A`, `Cable sizes: PV ${s.pvCable} mm2, Battery ${s.batteryCable} mm2, AC ${s.acCable} mm2`, `Recommendation: ${s.recommendation}`, `Panel example: ${s.panelExample}`, `Battery example: ${s.batteryExample}`].forEach(line => { doc.text(doc.splitTextToSize(line, 180), 14, y); y += 8 }); y += 4; doc.setFont("helvetica", "bold"); doc.text("Appliance List", 14, y); y += 8; doc.setFont("helvetica", "normal"); myList.forEach((i, n) => { if (y > 270) { doc.addPage(); y = 18 } doc.text(doc.splitTextToSize(`${n + 1}. ${i.name} - ${i.displayPower} - ${i.hours} hrs/day - ${Math.round(i.dailyEnergy)} Wh/day`, 180), 14, y); y += 8 }); doc.save("solar-home-recommendation.pdf"); toast("PDF saved", "Recommendation downloaded.") };
+    $("shareResultsBtn").onclick = async () => { const s = summary(); const text = `Solar Home Results\nEnergy: ${s.totalEnergyWh.toLocaleString()} Wh/day (${s.totalEnergyKwh} kWh/day)\nPanels: ${s.panelPowerWp.toLocaleString()} Wp\nBattery: ${s.batteryKwh} kWh\nInverter: ${s.inverterKva} kVA\nRecommendation: ${s.recommendation}`; if (navigator.share) { try { await navigator.share({ title: "Solar Home Results", text, url: location.href }) } catch (e) { if (e.name !== "AbortError") toast("Sharing failed", "Try copying instead.", "error") } } else if (navigator.clipboard) { await navigator.clipboard.writeText(text + "\n" + location.href); toast("Copied", "Results copied to clipboard.") } else toast("Unavailable", "Sharing is not supported here.", "error") };
+    function setAvatar(el, user) { if (!el || !user) return; if (user.photo) { el.innerHTML = `<img src="${user.photo}" alt="Profile picture">` } else { el.textContent = initials(user.name) } } function updateOwnerVisibility() { const u = currentUser(); const isAdmin = !!(u && u.role === "admin"); document.querySelectorAll(".owner-only").forEach(el => el.style.display = isAdmin ? "" : "none"); document.querySelectorAll(".bottom-nav .nav-item").forEach(el => el.style.width = isAdmin ? "20%" : "25%") }
+    function updateUserUI() { const u = currentUser(); if (!u) return; setAvatar($("homeAvatar"), u); setAvatar($("profileAvatar"), u); setAvatar($("photoPreview"), u); $("profileName").textContent = u.name; $("profileEmail").textContent = u.email; $("profileNameInput").value = u.name; $("profileEmailInput").value = u.email; updateOwnerVisibility(); renderProfile(); renderAdmin() }
+    function renderProfile() { const u = currentUser(); if (!u) return; const c = calc(); $("profileName").textContent = u.name; $("profileEmail").textContent = u.email; setAvatar($("profileAvatar"), u); setAvatar($("photoPreview"), u); $("profileLoads").textContent = myList.length; $("profileEnergy").textContent = Math.round(c.totalEnergyWh).toLocaleString(); $("profilePanels").textContent = Math.ceil(c.panelPowerWp).toLocaleString(); $("profileNameInput").value = u.name; $("profileEmailInput").value = u.email; renderDatabasePreview() }
+    function renderDatabasePreview() { const el = $("databasePreview"); if (el) el.textContent = JSON.stringify(getDB(), null, 2) }
 
-    function calcLoads(loads){const totalEnergyWh=(loads||[]).reduce((s,i)=>s+(Number(i.dailyEnergy)||0),0),totalPowerW=(loads||[]).reduce((s,i)=>s+(Number(i.avgPower)||0),0);return{totalEnergyWh,totalPowerW,panelPowerWp:totalEnergyWh?totalEnergyWh/PEAK_SUN_HOURS/LOSS_FACTOR:0}}
-    function renderAdminDatabasePreview(){const el=$("adminDatabasePreview");if(el)el.textContent=JSON.stringify(getDB(),null,2)}
-    function renderAdmin(){const u=currentUser();if(!u||u.role!=="admin")return;const db=getDB();const users=db.users||[];const projects=db.projects||{};let totalLoads=0,totalEnergy=0,totalProjects=0;users.forEach(user=>{const loads=(projects[user.id]&&projects[user.id].loads)||[];if(loads.length)totalProjects++;totalLoads+=loads.length;totalEnergy+=loads.reduce((s,i)=>s+(Number(i.dailyEnergy)||0),0)});$("adminTotalUsers").textContent=users.length;$("adminTotalProjects").textContent=totalProjects;$("adminTotalLoads").textContent=totalLoads;$("adminTotalEnergy").textContent=Math.round(totalEnergy).toLocaleString()+" Wh";$("adminUsersList").innerHTML=users.map(user=>{const loads=(projects[user.id]&&projects[user.id].loads)||[];const c=calcLoads(loads);const projectDate=projects[user.id]?.updatedAt?new Date(projects[user.id].updatedAt).toLocaleString():"No project yet";return `<div class="card user-card"><div class="user-head"><div><div class="user-name">${user.name}</div><div class="user-email">${user.email}</div></div><div class="user-pill">${user.role==='admin'?'OWNER':'USER'}</div></div><div class="admin-loads">Joined: ${new Date(user.createdAt).toLocaleDateString()}<br>Last project update: ${projectDate}<br>Loads: ${loads.length} • Energy: ${Math.round(c.totalEnergyWh).toLocaleString()} Wh/day • Panels: ${Math.ceil(c.panelPowerWp).toLocaleString()} Wp</div></div>`}).join("")||`<div class="card list-empty">No users yet.</div>`;renderAdminDatabasePreview()}
-    $("adminRefreshBtn").onclick=()=>{renderAdmin();toast("Admin refreshed","Latest local database loaded.")};
-    $("adminExportBtn").onclick=()=>$("exportDbBtn").click();
-    $("adminClearSessionsBtn").onclick=()=>{const db=getDB();db.sessions.currentUserId=null;saveDB(db);myList=[];$("bottomNav").classList.add("hidden");showPage("loginPage");toast("Session cleared","Admin session has been cleared.")};
-    $("profilePhotoInput").onchange=e=>{const file=e.target.files&&e.target.files[0];if(!file)return;if(!file.type.startsWith("image/")){toast("Wrong file","Please choose an image file.","error");return}if(file.size>2*1024*1024){toast("Image too large","Choose an image below 2MB for smooth loading.","error");return}const reader=new FileReader();reader.onload=()=>{const db=getDB();const u=db.users.find(x=>x.id===db.sessions.currentUserId);if(u){u.photo=reader.result;saveDB(db);updateUserUI();toast("Profile picture added","Your photo has been saved on this device.")}};reader.readAsDataURL(file)};
-    $("saveProfileBtn").onclick=()=>{const name=clean($("profileNameInput").value),email=clean($("profileEmailInput").value).toLowerCase();if(!name||!email.includes("@")){toast("Check profile","Enter a valid name and email.","error");return}const db=getDB();const u=db.users.find(x=>x.id===db.sessions.currentUserId);if(u){u.name=name;u.email=email;saveDB(db);updateUserUI();toast("Profile saved","Your profile has been updated.")}};
-    $("exportDbBtn").onclick=()=>{const blob=new Blob([JSON.stringify(getDB(),null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="solar-home-database.json";a.click();URL.revokeObjectURL(a.href);toast("JSON exported","Your free JSON database file has downloaded.")};
-    $("resetDbBtn").onclick=()=>{if(confirm("Reset the local JSON database?")){localStorage.removeItem(DB_KEY);saveDB(defaultDB);myList=[];$("bottomNav").classList.add("hidden");showPage("loginPage");toast("Database reset","Start again with a new account.")}};
-    $("logoutBtn").onclick=()=>{const db=getDB();db.sessions.currentUserId=null;saveDB(db);myList=[];$("bottomNav").classList.add("hidden");updateOwnerVisibility();showPage("loginPage");toast("Logged out","You have signed out.")};
+    function calcLoads(loads) { const totalEnergyWh = (loads || []).reduce((s, i) => s + (Number(i.dailyEnergy) || 0), 0), totalPowerW = (loads || []).reduce((s, i) => s + (Number(i.avgPower) || 0), 0); return { totalEnergyWh, totalPowerW, panelPowerWp: totalEnergyWh ? totalEnergyWh / PEAK_SUN_HOURS / LOSS_FACTOR : 0 } }
+    function renderAdminDatabasePreview() { const el = $("adminDatabasePreview"); if (el) el.textContent = JSON.stringify(getDB(), null, 2) }
+    function renderAdmin() { const u = currentUser(); if (!u || u.role !== "admin") return; const db = getDB(); const users = db.users || []; const projects = db.projects || {}; let totalLoads = 0, totalEnergy = 0, totalProjects = 0; users.forEach(user => { const loads = (projects[user.id] && projects[user.id].loads) || []; if (loads.length) totalProjects++; totalLoads += loads.length; totalEnergy += loads.reduce((s, i) => s + (Number(i.dailyEnergy) || 0), 0) }); $("adminTotalUsers").textContent = users.length; $("adminTotalProjects").textContent = totalProjects; $("adminTotalLoads").textContent = totalLoads; $("adminTotalEnergy").textContent = Math.round(totalEnergy).toLocaleString() + " Wh"; $("adminUsersList").innerHTML = users.map(user => { const loads = (projects[user.id] && projects[user.id].loads) || []; const c = calcLoads(loads); const projectDate = projects[user.id]?.updatedAt ? new Date(projects[user.id].updatedAt).toLocaleString() : "No project yet"; return `<div class="card user-card"><div class="user-head"><div><div class="user-name">${user.name}</div><div class="user-email">${user.email}</div></div><div class="user-pill">${user.role === 'admin' ? 'OWNER' : 'USER'}</div></div><div class="admin-loads">Joined: ${new Date(user.createdAt).toLocaleDateString()}<br>Last project update: ${projectDate}<br>Loads: ${loads.length} • Energy: ${Math.round(c.totalEnergyWh).toLocaleString()} Wh/day • Panels: ${Math.ceil(c.panelPowerWp).toLocaleString()} Wp</div></div>` }).join("") || `<div class="card list-empty">No users yet.</div>`; renderAdminDatabasePreview() }
+    $("adminRefreshBtn").onclick = () => { renderAdmin(); toast("Admin refreshed", "Latest local database loaded.") };
+    $("adminExportBtn").onclick = () => $("exportDbBtn").click();
+    $("adminClearSessionsBtn").onclick = () => { const db = getDB(); db.sessions.currentUserId = null; saveDB(db); myList = []; $("bottomNav").classList.add("hidden"); showPage("loginPage"); toast("Session cleared", "Admin session has been cleared.") };
+    $("profilePhotoInput").onchange = e => { const file = e.target.files && e.target.files[0]; if (!file) return; if (!file.type.startsWith("image/")) { toast("Wrong file", "Please choose an image file.", "error"); return } if (file.size > 2 * 1024 * 1024) { toast("Image too large", "Choose an image below 2MB for smooth loading.", "error"); return } const reader = new FileReader(); reader.onload = () => { const db = getDB(); const u = db.users.find(x => x.id === db.sessions.currentUserId); if (u) { u.photo = reader.result; saveDB(db); updateUserUI(); toast("Profile picture added", "Your photo has been saved on this device.") } }; reader.readAsDataURL(file) };
+    $("saveProfileBtn").onclick = () => { const name = clean($("profileNameInput").value), email = clean($("profileEmailInput").value).toLowerCase(); if (!name || !email.includes("@")) { toast("Check profile", "Enter a valid name and email.", "error"); return } const db = getDB(); const u = db.users.find(x => x.id === db.sessions.currentUserId); if (u) { u.name = name; u.email = email; saveDB(db); updateUserUI(); toast("Profile saved", "Your profile has been updated.") } };
+    $("exportDbBtn").onclick = () => { const blob = new Blob([JSON.stringify(getDB(), null, 2)], { type: "application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "solar-home-database.json"; a.click(); URL.revokeObjectURL(a.href); toast("JSON exported", "Your free JSON database file has downloaded.") };
+    $("resetDbBtn").onclick = () => { if (confirm("Reset the local JSON database?")) { localStorage.removeItem(DB_KEY); saveDB(defaultDB); myList = []; $("bottomNav").classList.add("hidden"); showPage("loginPage"); toast("Database reset", "Start again with a new account.") } };
+    $("logoutBtn").onclick = () => { const db = getDB(); db.sessions.currentUserId = null; saveDB(db); myList = []; $("bottomNav").classList.add("hidden"); updateOwnerVisibility(); showPage("loginPage"); toast("Logged out", "You have signed out.") };
 
-    setAuthMode("signin");renderCards();renderCalc();renderRecommendations();renderDatabasePreview();const existing=currentUser();if(existing){loadProject();$("bottomNav").classList.remove("hidden");updateUserUI();showPage("homePage")} 
+    setAuthMode("signin"); renderCards(); renderCalc(); renderRecommendations(); renderDatabasePreview(); const existing = currentUser(); if (existing) { loadProject(); $("bottomNav").classList.remove("hidden"); updateUserUI(); showPage("homePage") } 
   </script>
 </body>
+
 </html>
